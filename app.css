@@ -1,0 +1,46 @@
+body {
+    width: 300px;
+    height: 400px;
+    background: #414c50;
+}
+
+header {
+    border-bottom: #02427a 2px solid;
+    display: flex;
+}
+
+.welcome-message {
+    color: #3ab6eb;
+}
+
+.welcome-message p {
+    color: white;
+}
+
+.logged-out-nav li {
+    border: 2px solid #02427a;
+    padding: 2px;
+    margin: 2px;
+    background: #02427a;
+    color: white;
+    list-style-type: none;
+}
+
+/* #094d66 */
+
+main h3, h4 {
+    color: white;
+}
+
+.button-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+button {
+    padding: 4px;
+    margin: 2px;
+    background: #02427a;
+    color: white;
+}
