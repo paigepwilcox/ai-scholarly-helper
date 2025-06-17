@@ -1,0 +1,10 @@
+{
+    "name": "Hello worlds",
+    "description": "base level extension",
+    "version": "1.0",
+    "manifest_version": 3,
+    "action": {
+        "default_popup": "logged-out.html",
+        "default_icon": "oll.png"
+    }
+}
