@@ -1,0 +1,143 @@
+# Description
+A chrome browser extension that helps a user to read through scholary articles exclusivley on pubmed. This tool will allow a reader to examine information on one page, rather than opening a new tab to search for definitions. Two of the main issues that comes from reading scholarly articles are speacialized language and statistical reasoning/meaning. Option of two active learning questions per definition The user experience will be similar to grammarly's.
+
+Aliviates readibility issues that stem from:
+1. Specialized Language
+2. Complex Methodology -- tbd
+List Speacialized Language and their respective definitions, and explain Statistical reasoning. Show items on the list when they appear on the page. For every item offer two active learning questions. The list will live in the right side of the page at vh and will toggle to open and close.
+
+Methodology:
+- Accessing text fields 
+  - Content Scripts 
+
+
+
+# MVP 
+Problem: Scholarly articles 2 main readability problems - 1 specalized language 2 complex methodology 
+
+Main Value: An app that will identify and define all speacalized language and explain methodology used 
+
+Market: Multiple chrome extensions offering similar tools are available. 
+
+Core Features:
+- AI prompts to identify and define all specalized language
+- AI prompts to explain methodology 
+Other Features:
+- AI prompts for active reading questions
+- A user can place words or phrases in 2 categories: know, learning. The ones that are known are omitted from the output
+
+User Journey:
+1. Opens chrome extension on a PubMed journal 
+2. Login or Continue As Guest
+3. Choose if you want only one feature activated or all three (language, methodology, questions)
+4. User reads through journal 
+
+Tech Stack:
+- HTML CSS Python Django 
+- Content Scripts
+- ChatGPT API
+
+
+
+
+
+
+
+# Sprint (agile)
+
+*Week 1: Extension + Basic Backend*
+
+Day 1–2: Chrome Extension Setup 6/24
+- Set up manifest.json and content scripts ✅ 
+- Target PubMed pages and inject scripts correctly ✅ 
+- Extract article content (abstract, body) ✅ 
+
+Day 3–4: Backend Setup (Django)
+- Update Django settings.py to connect postgresql database
+- Confirm connection
+- Create a model
+- Create an endpoint
+- Accept plain text input (article section)
+- run migrations
+
+Day 5: Connect Extension ↔ Django
+- From the extension, send article content to Django via fetch (CORS setup)
+- From content script, send article text via endpoint previously created
+- Receive and log a placeholder response
+- Confirm browser → extension → Django pipeline works
+
+Day 6–7: Add ChatGPT API Integration
+- In Django 
+  - send terms/text to ChatGPT API using OpenAI’s SDK
+- Prompt it to extract & define:
+  - Specialized terms
+  - Complex methodologies
+-  Return structured response to extension
+
+
+
+
+*Week 2: Frontend UI, UX, Testing & Polish*
+
+Day 8–9: Render Definitions in Chrome Extension
+- From API response, inject highlights into DOM for each term
+- On hover/click, display definitions in a tooltip or popup
+- Style tooltips with CSS (optionally use Popper.js or custom CSS)
+- Create a collapsable right side page with all terms and toggle for definitions  
+
+Day 10: Improve Caching & Reliability
+- Handle no-definition or API error gracefully in Django & Chrome Extension
+- Add fallback “no definition found” UI
+
+Day 11–12: Extension UI Enhancements
+- Add browser action popup (toggle enable/disable)
+- Add loading spinner or "processing" state
+- Style tooltips for clarity, accessibility
+
+Day 13: Testing & Debugging
+- Test on:
+  - Abstract-only articles
+  - Full-text articles
+  - Articles with images, PDFs, or special formatting
+  - Fix common DOM bugs or mis-parses
+  - Cross-browser test (optional)
+
+Day 14: Demo & Feedback
+- Show to friends, researchers, or peers -> Gather UX feedback
+- Document edge cases or v2 features 
+
+
+
+# Notes
+Common DOM Structure for PMC Article Pages (pmc.ncbi.nlm.nih.gov)
+- Title 
+h1.content-title
+<h1 class="content-title">...</h1>
+This is the main article title.
+
+- Authors
+div.contrib.contrib-author
+<div class="contrib-group">
+  <div class="contrib contrib-author">...</div>
+  <!-- multiple authors -->
+</div>
+Contains author names, affiliations, etc.
+
+- Abstract
+div.abstract-content.selected
+<section class="abstract">
+  <h2>Abstract</h2>
+  <div class="abstract-content selected">...</div>
+</section>
+Note: use abstract-content.selected class, indicates active display
+
+- Section Headers & Body
+section.sec
+<section class="sec"></section>
+All major sections are wrapped in <section class="sec">.
+
+- Figures, Tables, References, Supplementary Material
+<div class="fig-wrap"> / <figure>
+<div class="table-wrap">
+<div class="ref-list">
+<div class="supplemental-materials">
