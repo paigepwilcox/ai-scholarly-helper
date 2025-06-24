@@ -9,7 +9,9 @@
     },
     "content_scripts": [
         {
-            "matches": ["https://pubmed.ncbi.nlm.nih.gov/*"]
+            "matches": ["https://pubmed.ncbi.nlm.nih.gov/*"],
+            "js": ["pubmed-content.js"],
+            "css": ["app.css"]
         }
     ]
 }
