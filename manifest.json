@@ -10,7 +10,7 @@
     "content_scripts": [
         {
             "matches": ["https://pubmed.ncbi.nlm.nih.gov/*"],
-            "js": ["pubmed-content.js"],
+            "js": ["scripts/pubmed-content.js"],
             "css": ["app.css"]
         }
     ]
