@@ -1,15 +1,9 @@
 # Description
-A chrome browser extension that helps a user to read through scholary articles exclusivley on pubmed. This tool will allow a reader to examine information on one page, rather than opening a new tab to search for definitions. Two of the main issues that comes from reading scholarly articles are speacialized language and statistical reasoning/meaning. Option of two active learning questions per definition The user experience will be similar to grammarly's.
-
-Aliviates readibility issues that stem from:
-1. Specialized Language
-2. Complex Methodology -- tbd
-List Speacialized Language and their respective definitions, and explain Statistical reasoning. Show items on the list when they appear on the page. For every item offer two active learning questions. The list will live in the right side of the page at vh and will toggle to open and close.
+A chrome browser extension that helps a user to read scholary articles, exclusivley on pubmed. This tool will allow a reader to examine information on one page, rather than opening a new tab to search for definitions. Two of the main issues that comes from reading scholarly articles are speacialized language and complex methodology. Option of two active learning questions per definition.
 
 Methodology:
 - Accessing text fields 
   - Content Scripts 
-
 
 
 # MVP 
