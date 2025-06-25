@@ -13,15 +13,16 @@ Methodology:
 
 
 # MVP 
-Problem: Scholarly articles 2 main readability problems - 1 specalized language 2 complex methodology 
+Problem: Scholarly articles readability is low due to specalized language and complex methodology. When reading through an article and stumbling across unknown verbage, one usually has to open a new tab to search for a definition in order to accuratly comprehend the reading. Sometimes a reader will unknowingly pass by a word thats definition is dependant on the respective field of discipline, a reader will often make the assumption that they know that word since they have used it in other contexts before, and thus will not fully understand the content.
 
-Main Value: An app that will identify and define all speacalized language and explain methodology used 
+Main Value: Heightens readablity of scholarly articles by identifying terms and methodology that need specification, while keeping all the details on one page. 
 
-Market: Multiple chrome extensions offering similar tools are available. 
+Market: Multiple chrome extensions offering similar tools are available and wanted, Scholarcy for example has over 600,000 users.
 
 Core Features:
 - AI prompts to identify and define all specalized language
 - AI prompts to explain methodology 
+
 Other Features:
 - AI prompts for active reading questions
 - A user can place words or phrases in 2 categories: know, learning. The ones that are known are omitted from the output
@@ -33,8 +34,7 @@ User Journey:
 4. User reads through journal 
 
 Tech Stack:
-- HTML CSS Python Django 
-- Content Scripts
+- HTML CSS Python Django ManifestV3 Postgresql
 - ChatGPT API
 
 
