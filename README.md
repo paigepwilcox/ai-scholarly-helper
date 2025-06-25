@@ -16,9 +16,12 @@ Heightens readablity of scholarly articles by identifying terms and methodology 
 Market: 
 Multiple chrome extensions offering similar tools are available and wanted, Scholarcy for example has over 600,000 users.
 
+Tech Stack:
+- HTML CSS Python Django ManifestV3 Postgresql
+- ChatGPT API
+
 Requirements:
 - Needs to be activated on a PubMed url 
-- 
 - AI prompts to identify and define all specalized language/verbiage within a field of discipline 
 - AI prompts to explain methodology 
 - GET from ChatGPTs API
@@ -26,6 +29,7 @@ Requirements:
 Stretch Goals:
 - AI prompts for active reading questions
 - A user can place words or phrases in 2 categories: know, learning. The ones that are known are omitted from the output
+- refactor frontend to be in react
 
 User Journey:
 1. Opens chrome extension on a PubMed journal 
@@ -33,9 +37,8 @@ User Journey:
 3. Choose if you want only one feature activated or all three (language, methodology, questions)
 4. User reads through journal 
 
-Tech Stack:
-- HTML CSS Python Django ManifestV3 Postgresql
-- ChatGPT API
+Frontend visual:
+![frontendvisual](frontendV1.png)
 
 
 
