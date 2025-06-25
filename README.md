@@ -111,9 +111,7 @@ Day 14: Demo & Feedback
 Common DOM Structure for PMC Article Pages (pmc.ncbi.nlm.nih.gov)
 
 Title 
-
 `h1.content-title`
-
 This is the main article title.
 
 
