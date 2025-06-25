@@ -16,11 +16,14 @@ Heightens readablity of scholarly articles by identifying terms and methodology 
 Market: 
 Multiple chrome extensions offering similar tools are available and wanted, Scholarcy for example has over 600,000 users.
 
-Core Features:
-- AI prompts to identify and define all specalized language
+Requirements:
+- Needs to be activated on a PubMed url 
+- 
+- AI prompts to identify and define all specalized language/verbiage within a field of discipline 
 - AI prompts to explain methodology 
+- GET from ChatGPTs API
 
-Other Features:
+Stretch Goals:
 - AI prompts for active reading questions
 - A user can place words or phrases in 2 categories: know, learning. The ones that are known are omitted from the output
 
@@ -45,14 +48,14 @@ Tech Stack:
 *Week 1: Extension + Basic Backend*
 
 Day 1–2: Chrome Extension Setup 6/24
-- Set up manifest.json and content scripts ✅ 
-- Target PubMed pages and inject scripts correctly ✅ 
-- Extract article content (abstract, body) ✅ 
+- ✅ Set up manifest.json and content scripts  
+- ✅ Target PubMed pages and inject scripts correctly 
+- ✅ Extract article content (abstract, body) 
 
-Day 3–4: Backend Setup (Django)
-- Create db
-- Update Django settings.py to connect postgresql database
-- Confirm connection
+Day 3–4: Backend Setup (Django) 6/25
+- ✅ Create db (named: ai_scholarly_helper_development & ai_scholarly_helper_test)
+- ✅ Update Django settings.py to connect postgresql database
+- ✅ Confirm connection
 - Create a model
 - Create an endpoint
 - Accept plain text input (article section)
