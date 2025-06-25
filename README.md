@@ -53,6 +53,7 @@ Day 1–2: Chrome Extension Setup 6/24
 - Extract article content (abstract, body) ✅ 
 
 Day 3–4: Backend Setup (Django)
+- Create db
 - Update Django settings.py to connect postgresql database
 - Confirm connection
 - Create a model
@@ -62,7 +63,6 @@ Day 3–4: Backend Setup (Django)
 
 Day 5: Connect Extension ↔ Django
 - From the extension, send article content to Django via fetch (CORS setup)
-- From content script, send article text via endpoint previously created
 - Receive and log a placeholder response
 - Confirm browser → extension → Django pipeline works
 
@@ -90,9 +90,9 @@ Day 10: Improve Caching & Reliability
 - Add fallback “no definition found” UI
 
 Day 11–12: Extension UI Enhancements
-- Add browser action popup (toggle enable/disable)
 - Add loading spinner or "processing" state
 - Style tooltips for clarity, accessibility
+- Update pubmed-content.js to get all available content data 
 
 Day 13: Testing & Debugging
 - Test on:
@@ -100,10 +100,9 @@ Day 13: Testing & Debugging
   - Full-text articles
   - Articles with images, PDFs, or special formatting
   - Fix common DOM bugs or mis-parses
-  - Cross-browser test (optional)
 
 Day 14: Demo & Feedback
-- Show to friends, researchers, or peers -> Gather UX feedback
+- Show to academics, friends, or peers -> Gather UX feedback
 - Document edge cases or v2 features 
 
 
@@ -112,23 +111,18 @@ Day 14: Demo & Feedback
 Common DOM Structure for PMC Article Pages (pmc.ncbi.nlm.nih.gov)
 - Title 
 h1.content-title
-<h1 class="content-title">...</h1>
 This is the main article title.
 
 - Authors
 div.contrib.contrib-author
-<div class="contrib-group">
-  <div class="contrib contrib-author">...</div>
-  <!-- multiple authors -->
-</div>
 Contains author names, affiliations, etc.
 
 - Abstract
 div.abstract-content.selected
-<section class="abstract">
+`<section class="abstract">
   <h2>Abstract</h2>
   <div class="abstract-content selected">...</div>
-</section>
+</section>`
 Note: use abstract-content.selected class, indicates active display
 
 - Section Headers & Body
