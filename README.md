@@ -7,11 +7,14 @@ Methodology:
 
 
 # MVP 
-Problem: Scholarly articles readability is low due to specalized language and complex methodology. When reading through an article and stumbling across unknown verbage, one usually has to open a new tab to search for a definition in order to accuratly comprehend the reading. Sometimes a reader will unknowingly pass by a word thats definition is dependant on the respective field of discipline, a reader will often make the assumption that they know that word since they have used it in other contexts before, and thus will not fully understand the content.
+Problem: 
+Scholarly articles readability is low due to specalized language and complex methodology. When reading through an article and stumbling across unknown verbage, one usually has to open a new tab to search for a definition in order to accuratly comprehend the reading. Sometimes a reader will unknowingly pass by a word thats definition is dependant on the respective field of discipline, a reader will often make the assumption that they know that word since they have used it in other contexts before, and thus will not fully understand the content.
 
-Main Value: Heightens readablity of scholarly articles by identifying terms and methodology that need specification, while keeping all the details on one page. 
+Main Value: 
+Heightens readablity of scholarly articles by identifying terms and methodology that need specification, while keeping all the details on one page. 
 
-Market: Multiple chrome extensions offering similar tools are available and wanted, Scholarcy for example has over 600,000 users.
+Market: 
+Multiple chrome extensions offering similar tools are available and wanted, Scholarcy for example has over 600,000 users.
 
 Core Features:
 - AI prompts to identify and define all specalized language
