@@ -109,29 +109,24 @@ Day 14: Demo & Feedback
 
 # Notes
 Common DOM Structure for PMC Article Pages (pmc.ncbi.nlm.nih.gov)
-- Title 
-h1.content-title
+Title 
+`h1.content-title`
 This is the main article title.
 
-- Authors
-div.contrib.contrib-author
+Authors
+`div.contrib.contrib-author`
 Contains author names, affiliations, etc.
 
-- Abstract
-div.abstract-content.selected
-`<section class="abstract">
-  <h2>Abstract</h2>
-  <div class="abstract-content selected">...</div>
-</section>`
+Abstract
+`div.abstract-content.selected`
 Note: use abstract-content.selected class, indicates active display
 
-- Section Headers & Body
-section.sec
-<section class="sec"></section>
-All major sections are wrapped in <section class="sec">.
+Section Headers & Body
+`section.sec`
+All major sections are wrapped in `<section class="sec">`.
 
 - Figures, Tables, References, Supplementary Material
-<div class="fig-wrap"> / <figure>
-<div class="table-wrap">
-<div class="ref-list">
-<div class="supplemental-materials">
+`<div class="fig-wrap"> / <figure>`
+`<div class="table-wrap">`
+`<div class="ref-list">`
+`<div class="supplemental-materials">`
