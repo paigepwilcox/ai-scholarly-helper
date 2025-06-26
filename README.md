@@ -37,8 +37,6 @@ User Journey:
 3. Choose if you want only one feature activated or all three (language, methodology, questions)
 4. User reads through journal 
 
-Frontend visual:
-![frontendvisual](frontendV1.png)
 
 
 
