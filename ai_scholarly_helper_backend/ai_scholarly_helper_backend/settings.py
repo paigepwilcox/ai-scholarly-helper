@@ -43,10 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ai_scholarly_helper_app'
+    'ai_scholarly_helper_app',
+    'rest_framework',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -81,11 +84,6 @@ WSGI_APPLICATION = 'ai_scholarly_helper_backend.wsgi.application'
 print(env('POSTGRESQL_USER'), "psql user")
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.postgresql',
-        # 'OPTIONS': {
-        #     'service': 'ai_scholarly_helper_test',
-        #     'passfile': '.my_pgpass',
-        # },
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ai_scholarly_helper_test',
         'USER': env('POSTGRESQL_USER'),
@@ -136,3 +134,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# CORS 
+CORS_ALLOW_ALL_ORIGINS = True # DEVELOPMENT PURPOSES, CHANGE IN PROD

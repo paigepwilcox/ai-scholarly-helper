@@ -7,6 +7,11 @@
         "default_popup": "logged-out.html",
         "default_icon": "oll.png"
     },
+    "permissions": [
+        "scripting",
+        "activeTab"
+    ],
+    "host_permission": ["https://pubmed.ncbi.nlm.nih.gov/*"],
     "content_scripts": [
         {
             "matches": ["https://pubmed.ncbi.nlm.nih.gov/*"],

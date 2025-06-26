@@ -1,9 +1,5 @@
 # Description
-A chrome browser extension that helps a user to read scholary articles, exclusivley on pubmed. This tool will allow a reader to examine information on one page, rather than opening a new tab to search for definitions. Two of the main issues that comes from reading scholarly articles are speacialized language and complex methodology. Option of two active learning questions per definition.
-
-Methodology:
-- Accessing text fields 
-  - Content Scripts 
+A chrome browser extension that helps a user to read scholarly articles, exclusivley on pubmed. This tool will allow a reader to examine information on one page, rather than opening a new tab to search for definitions. Two of the main issues that comes from reading scholarly articles are speacialized language and complex methodology. Option of two active learning questions per definition.
 
 
 # MVP 
@@ -48,24 +44,34 @@ User Journey:
 
 *Week 1: Extension + Basic Backend*
 
-Day 1–2: Chrome Extension Setup 6/24
+Day 1–2: Chrome Extension Setup | 6/24
 - ✅ Set up manifest.json and content scripts  
 - ✅ Target PubMed pages and inject scripts correctly 
 - ✅ Extract article content (abstract, body) 
 
-Day 3–4: Backend Setup (Django) 6/25
+Day 3–4: Backend Setup (Django) | 6/25 - 6/26
 - ✅ Create db (named: ai_scholarly_helper_development & ai_scholarly_helper_test)
 - ✅ Update Django settings.py to connect postgresql database
 - ✅ Confirm connection
-- Create a model
-- Create an endpoint
-- Accept plain text input (article section)
-- run migrations
+- ✅ Set up django rest framwork
+- ✅ Create an endpoint
+- ✅ Accept plain text input (article section)
 
-Day 5: Connect Extension ↔ Django
-- From the extension, send article content to Django via fetch (CORS setup)
-- Receive and log a placeholder response
-- Confirm browser → extension → Django pipeline works
+Day 5: Connect Extension ↔ Django | 6/26
+- ✅ From the extension, send article content to Django via fetch (CORS setup)
+- ✅ Receive and log a placeholder response
+- ✅ Above testing in POSTMAN
+- ✅ Confirm browser → extension → Django pipeline works
+- Design response data structures for each view (decide JSON shape)
+- Create view #1: Specialized language only
+- Filter AI response to just terms + definitions
+- Create view #2: Methodology explanations only
+- Return only methodology text
+- Create view #3: Combined specialized language + methodology
+- Add URL routes for all 3 views
+- Add active reading questions generation via placeholder
+- Create view #4: Specialized language + methodology + active reading questions for each term
+- Design JSON to include questions linked to terms
 
 Day 6–7: Add ChatGPT API Integration
 - In Django 
@@ -108,6 +114,8 @@ Day 14: Demo & Feedback
 
 
 
+
+
 # Notes
 Common DOM Structure for PMC Article Pages (pmc.ncbi.nlm.nih.gov)
 
@@ -132,3 +140,85 @@ Figures, Tables, References, Supplementary Material<br>
 `<div class="table-wrap">`<br>
 `<div class="ref-list">`<br>
 `<div class="supplemental-materials">`<br>
+
+
+Work-Flow for mvu
+create model 
+add a path to that model in the urls specific to the app
+
+
+Clarify Data Model 
+1. users
+Stores basic user information.
+
+Column	Type	Notes
+id	UUID	Primary key
+name	TEXT	Full name
+email	TEXT	Unique
+username	TEXT	Unique
+created_at	TIMESTAMP	Default: now()
+
+2. saved_articles
+Stores articles saved by users (metadata only).
+
+Column	Type	Notes
+id	UUID	Primary key
+user_id	UUID	FK → users(id)
+title	TEXT	Article title
+url	TEXT	Link to journal or PubMed
+pubmed_id	TEXT	PubMed ID
+saved_at	TIMESTAMP	Default: now()
+
+3. article_notes
+Each note is linked to a saved article.
+
+Column	Type	Notes
+id	UUID	Primary key
+article_id	UUID	FK → saved_articles(id)
+content	TEXT	User-written note
+created_at	TIMESTAMP	Default: now()
+updated_at	TIMESTAMP	Update on edit
+
+4. known_terms
+Stores individual terms a user adds to their “library.”
+
+Column	Type	Notes
+id	UUID	Primary key
+user_id	UUID	FK → users(id)
+term	TEXT	Known or saved term
+added_at	TIMESTAMP	Default: now()
+
+
+                           ┌────────────┐
+                           │   users    │
+                           ├────────────┤
+                           │ id (PK)    │◄──────────────┐
+                           │ name       │               │
+                           │ email      │               │
+                           │ username   │               │
+                           │ created_at │               │
+                           └────┬───────┘               │
+                                │                       │
+              ┌────────────────┘                       │
+              │                                        ▼
+     ┌───────────────────┐                    ┌────────────────┐
+     │  saved_articles   │                    │   known_terms  │
+     ├───────────────────┤                    ├────────────────┤
+     │ id (PK)           │                    │ id (PK)        │
+     │ user_id (FK)──────┘                    │ user_id (FK)───┘
+     │ title            │                    │ term           │
+     │ url              │                    │ added_at       │
+     │ pubmed_id        │                    └────────────────┘
+     │ saved_at         │
+     └────┬─────────────┘
+          │
+          ▼
+ ┌────────────────────┐
+ │   article_notes     │
+ ├────────────────────┤
+ │ id (PK)            │
+ │ article_id (FK)────┘
+ │ content            │
+ │ created_at         │
+ │ updated_at         │
+ └────────────────────┘
