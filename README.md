@@ -62,26 +62,25 @@ Day 5: Connect Extension ↔ Django | 6/26
 - ✅ Receive and log a placeholder response
 - ✅ Above testing in POSTMAN
 - ✅ Confirm browser → extension → Django pipeline works
-- Design response data structures for each view (decide JSON shape)
-- Create view #1: Specialized language only
-- Filter AI response to just terms + definitions
-- Create view #2: Methodology explanations only
-- Return only methodology text
-- Create view #3: Combined specialized language + methodology
-- Add URL routes for all 3 views
-- Add active reading questions generation via placeholder
-- Create view #4: Specialized language + methodology + active reading questions for each term
-- Design JSON to include questions linked to terms
 
-Day 6–7: Add ChatGPT API Integration
+Day 6–7: Add ChatGPT API Integration 6/27
+- ✅ Design response data structures for each view (decide JSON shape) || workflow: decide endpoints → determine view type → implement view → implement url → test with postman
+  - ✅ Create endpoints for all 4 views 
+  - ✅ Decide view type for all 4 views 
+  - ✅ Create view #1: Specialized language only
+  - ✅ Create view #2: Methodology explanations only
+  - ✅ Create view #3: Combined specialized language + methodology
+  - ✅ Create view #4: Specialized language + methodology + active reading questions for each term
+  - ✅ Add active reading questions generation via placeholder
+  - ✅ Design JSON to include questions linked to terms
+  - ✅ Add URL routes for all 4 views
+  - ✅ Test with postman 200OK
 - In Django 
   - send terms/text to ChatGPT API using OpenAI’s SDK
 - Prompt it to extract & define:
   - Specialized terms
   - Complex methodologies
 -  Return structured response to extension
-
-
 
 
 *Week 2: Frontend UI, UX, Testing & Polish*

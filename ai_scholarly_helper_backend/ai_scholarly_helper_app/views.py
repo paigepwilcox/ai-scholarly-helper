@@ -17,5 +17,76 @@ class Analyze(APIView):
                 {"term": "mRNA", "definition": "Messenger RNA, carries genetic info from DNA."},
                 {"term": "ELISA", "definition": "A lab technique to detect antigens or antibodies."}
             ],
-            "methodology": "This study used quantitative PCR to amplify mRNA sequences."
+            "methodologies": [
+                { "methodology": "surveys and questionnaires", "definition" : "This study used quantitative PCR to amplify mRNA sequences."},
+                {"methodology": "clinical trials", "definition" : "A systematic process to find out the safety and efficacy of an intervention (like a drug or device) in treating/preventing/diagnosing a disease or medical condition."}
+            ]
+        })
+    
+
+# Speacilized Language / Terminology / Verbage 
+class AnalyzeLanguage(APIView):
+    def post(self, requet):
+        abstract_text = requet.data.get("section", "")
+
+        if not abstract_text:
+            return Response({ "Error in AnalyzeLanguage View": "No text present"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # placeholderm returns only the terms 
+        return Response({
+            "terms": [
+                {"term": "mRNA", "definition": "Messenger RNA, carries genetic info from DNA."},
+                {"term": "ELISA", "definition": "A lab technique to detect antigens or antibodies."}
+            ]
+        })
+    
+class AnalyzeMethodology(APIView):
+    def post(self, requet):
+        abstract_text = requet.data.get("section", "")
+
+        if not abstract_text:
+            return Response({ "Error in AnalyzeLanguage View": "No text present"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # placeholderm returns only the terms 
+        return Response({
+            "methodologies": [
+                { "methodology": "surveys and questionnaires", 
+                "definition" : "This study used quantitative PCR to amplify mRNA sequences."},
+                {"methodology": "clinical trials", 
+                "definition" : "A systematic process to find out the safety and efficacy of an intervention (like a drug or device) in treating/preventing/diagnosing a disease or medical condition."}
+            ]
+        })
+
+class AnalyzeWithQuestions(APIView):
+    def post(self, requet):
+        abstract_text = requet.data.get("section", "")
+
+        if not abstract_text:
+            return Response({ "Error in AnalyzeLanguage View": "No text present"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response({
+            "terms": [
+                {"term": "mRNA", 
+                "definition": "Messenger RNA, carries genetic info from DNA.",
+                "questions": [
+                    "What is the role of mRNA in protein synthesis?",
+                    "How does mRNA differ from tRNA?"]
+                },
+                {"term": "ELISA",
+                "definition": "Stands for Enzyme-Linked Immunosorbent Assay. A lab technique to detect antigens or antibodies.",
+                "questions": [
+                    "What does this technique used for?",
+                    "What does ELISA stand for?"]
+                }
+            ],
+            "methodologies": [
+                {
+                    "methodology": "cohort study", 
+                    "definition" : "An observational study that follows a group (cohort) of individuals over time to assess outcomes based on exposures or characteristics.",
+                    "questions": ["What criteria were used to define the cohort in this study?", "What confounding variables might affect the outcome?"]
+                },
+                {"methodology": "randomized controlled trial", 
+                "definition" : "A study design where participants are randomly assigned to either the treatment or control group to reduce bias and establish causality.",
+                "questions": ["What are the benefits of randomization in this study's context?", "How was blinding handled, and why is it important?"]}
+            ]
         })
