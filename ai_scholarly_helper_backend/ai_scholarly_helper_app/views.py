@@ -2,6 +2,17 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from .chatgpt_helpers import prompt_chatgpt
+
+json_combined = {
+            "terms": [
+                {"term": "mRNA", "definition": "Messenger RNA, carries genetic info from DNA."},
+            ],
+            "methodologies": [
+                { "methodology": "surveys and questionnaires", 
+                "definition" : "This study used quantitative PCR to amplify mRNA sequences."},
+            ]
+        }
 
 # Create your views here.
 class Analyze(APIView):
@@ -11,17 +22,13 @@ class Analyze(APIView):
         if not abstract_text:
             return Response({"error": "No abstract text present"}, status=status.HTTP_400_BAD_REQUEST)
         
-        # chatgpt placeholder
-        return Response({
-            "terms": [
-                {"term": "mRNA", "definition": "Messenger RNA, carries genetic info from DNA."},
-                {"term": "ELISA", "definition": "A lab technique to detect antigens or antibodies."}
-            ],
-            "methodologies": [
-                { "methodology": "surveys and questionnaires", "definition" : "This study used quantitative PCR to amplify mRNA sequences."},
-                {"methodology": "clinical trials", "definition" : "A systematic process to find out the safety and efficacy of an intervention (like a drug or device) in treating/preventing/diagnosing a disease or medical condition."}
-            ]
-        })
+        prompt = f"Define all specialized language and methodology found in the text below and structure your response to be in this JSON format, \n {json_combined} \n text: {abstract_text}"
+
+        try: 
+            output = prompt_chatgpt(prompt)
+            return Response( { "chatgpt_response": output})
+        except Exception as e:
+            return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
     
 
 # Speacilized Language / Terminology / Verbage 

@@ -1,5 +1,5 @@
 
-
+// AnalyzeAll
 document.getElementById('request-all').addEventListener('click', () => {
 
     chrome.tabs.query({ active: true, currentWindow: true}, (tabs) => {

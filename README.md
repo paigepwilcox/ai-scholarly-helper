@@ -26,6 +26,7 @@ Stretch Goals:
 - AI prompts for active reading questions
 - A user can place words or phrases in 2 categories: know, learning. The ones that are known are omitted from the output
 - refactor frontend to be in react
+- Implement Prompt caching
 
 User Journey:
 1. Opens chrome extension on a PubMed journal 
@@ -75,11 +76,11 @@ Day 6–7: Add ChatGPT API Integration 6/27
   - ✅ Design JSON to include questions linked to terms
   - ✅ Add URL routes for all 4 views
   - ✅ Test with postman 200OK
-- In Django 
-  - send terms/text to ChatGPT API using OpenAI’s SDK
-- Prompt it to extract & define:
-  - Specialized terms
-  - Complex methodologies
+- ✅ In Django 
+  - ✅ send terms/text to ChatGPT API using OpenAI’s SDK
+- ✅ Prompt it to extract & define:
+  - ✅ Specialized terms
+  - ✅ Complex methodologies
 -  Return structured response to extension
 
 
