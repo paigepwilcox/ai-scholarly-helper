@@ -19,7 +19,7 @@ env = environ.Env()
 environ.Env.read_env()
 
 # Chatgpt API Key
-OPENAI_API_KEY = env('OPENAI_API_KEY')
+OPENAI_KEY = env('OPENAI_KEY')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

@@ -2,7 +2,7 @@ import openai
 from openai import OpenAI
 from django.conf import settings
 
-client = OpenAI(api_key=settings.OPENAI_API_KEY)
+client = OpenAI(api_key=settings.OPENAI_KEY)
 
 def prompt_chatgpt(prompt):
     response = client.chat.completions.create(
