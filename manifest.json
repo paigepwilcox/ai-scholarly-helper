@@ -9,9 +9,10 @@
     },
     "permissions": [
         "scripting",
-        "activeTab"
+        "activeTab",
+        "tabs"
     ],
-    "host_permission": ["https://pubmed.ncbi.nlm.nih.gov/*"],
+    "host_permissions": ["https://pubmed.ncbi.nlm.nih.gov/*"],
     "content_scripts": [
         {
             "matches": ["https://pubmed.ncbi.nlm.nih.gov/*"],
