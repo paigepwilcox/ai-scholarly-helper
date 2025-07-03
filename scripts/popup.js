@@ -1,3 +1,5 @@
+// Refactor to use classes?
+// import applyAnalysisAsHighlights from "./scripts/pubmed-content";
 
 // AnalyzeAll
 document.getElementById('request-all').addEventListener('click', () => {
@@ -20,7 +22,13 @@ document.getElementById('request-all').addEventListener('click', () => {
             })
             .then(response => response.json())
             .then(data => {
+                // send message to content script to highlight data 
                 console.log("did it!", data);
+                
+                chrome.tabs.sendMessage(tabs[0].id, {
+                    action: "applyHighlight",
+                    payload: data
+                });
             })
             .catch(err => {
                 console.log("An error has occurred when fetching data:", err);
