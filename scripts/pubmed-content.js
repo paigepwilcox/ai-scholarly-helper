@@ -37,14 +37,16 @@ function handleMessage(message, sender, sendResponse) {
 
     if (message.action === "applyHighlight") {
         console.log("hit");
-        applyAnalysisAsHighlights(payload)
+        console.log("sender;", sender);
+        applyAnalysisAsHighlights(message.payload)
+        sendResponse(true);
     }
 }
 
 // Listens for queue to send abstract text to popup.js via messaging
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     console.log("msg received");
-    handleMessage(message, sender, sendResponse);
+    await handleMessage(message, sender, sendResponse);
     return true;
 })
 

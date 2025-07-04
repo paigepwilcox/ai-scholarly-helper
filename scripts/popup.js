@@ -1,5 +1,4 @@
 // Refactor to use classes?
-// import applyAnalysisAsHighlights from "./scripts/pubmed-content";
 
 // AnalyzeAll
 document.getElementById('request-all').addEventListener('click', () => {
@@ -29,6 +28,7 @@ document.getElementById('request-all').addEventListener('click', () => {
                     action: "applyHighlight",
                     payload: data
                 });
+                console.log("hit on popupjs");
             })
             .catch(err => {
                 console.log("An error has occurred when fetching data:", err);
