@@ -12,20 +12,50 @@ function applyAnalysisAsHighlights(analysis) {
         NodeFilter.SHOW_TEXT,
 
     );
+    const textNodesArray = [];
 
-    let count = 0;
-    // get the text and the parent conatiner 
-    while (count < 40 || textNodes.nextNode()) {
-        const node = textNodes.currentNode;
+    while (textNodes.nextNode()) {
+        textNodesArray.push(textNodes.currentNode);
+    }
+
+    const termMap = {};
+    const regexTerms = Object.keys(analysis).map(term => {
+        termMap[term.toLocaleLowerCase()] = analysis[term];
+        return term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); 
+    });
+    const regex = new RegExp(`\\b(${regexTerms.join('|')})\\b`, 'gi');
+
+    textNodesArray.forEach(node => {
         const parent = node.parentNode;
-        console.log("node", node);
-        console.log("parent container", parent);
-        count++;
+        if (!parent || parent.closest('script, style, noscript') || parent.classList?.contains ('highlighted-term')) return;
 
-        // if (!parent || parent.closest(".highlighted-term, .highlighted-method")) continue;
+        const text = node.nodeValue;
+        let matchObj; 
+        const regexMatchesArray = [];
 
-
+        while ((matchObj = regex.exec(text)) !== null) {
+            matches.push({
+                term: matchObj[0],
+                start: matchObj.index,
+                end: matchObj.index + match[0].length
+            })
         }
+    });
+
+    // Using Range instead of innerHTML due to innerHTML breaking pubmed's JS 
+    for (let i = matches.length -1; i >= 0; i--) {
+        const { term, start, end } = matches[i];
+        const range = document.createRange();
+        range.setStart(node, start);
+        range.setEnd(node, end);
+
+        const span = document.createElement('span');
+        span.className = 'highlighter-term';
+        span.textContent = term;
+        span.setAttribute('data-definition', termMap[term.toLocaleLowerCase()]);
+        range.deleteContents();
+        range.insertNode(span);
+    }
 }
 
 function handleMessage(message, sender, sendResponse) {
