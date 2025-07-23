@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     width: 300px;
     height: 400px;
@@ -5,8 +9,13 @@ body {
 }
 
 header {
-    border-bottom: #02427a 2px solid;
+    border-bottom: #02427a solid 2px;
+    /* box-shadow: 0px 2px 16px -8px #02427a; */
+}
+
+.header {
     display: flex;
+
 }
 
 .welcome-message {
@@ -43,4 +52,9 @@ button {
     margin: 2px;
     background: #02427a;
     color: white;
+}
+
+.highlighted-term {
+    background-color: rgb(245, 109, 109);
+    font-weight: bolder;
 }
