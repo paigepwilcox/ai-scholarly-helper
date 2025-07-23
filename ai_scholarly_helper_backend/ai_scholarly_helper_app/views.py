@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+import json
 from .chatgpt_helpers import prompt_chatgpt
 
 json_combined = {
@@ -22,11 +23,12 @@ class Analyze(APIView):
         if not abstract_text:
             return Response({"error": "No abstract text present"}, status=status.HTTP_400_BAD_REQUEST)
         
-        prompt = f"Define all specialized language and methodology found in the text below and structure your response to be in this JSON format, \n {json_combined} \n text: {abstract_text}"
+        prompt = f"Define all specialized language and methodology found in the text below and return valid JSON only, do not include markdown do not include extra white space or new line syntax. json format: {json_combined} text: {abstract_text}"
 
         try: 
             output = prompt_chatgpt(prompt)
-            return Response( { "chatgpt_response": output})
+            parsed_output = json.loads(output)
+            return Response(parsed_output)
         except Exception as e:
             return Response({ "error": str(e) }, status=status.HTTP_400_BAD_REQUEST)
     
