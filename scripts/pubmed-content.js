@@ -23,6 +23,7 @@ function extractTextNodes() {
 
 // Building Regex
 function buildRegexTerms(analysis) {
+    console.log("analysis in build regex terms:", analysis);
     const termMap = {};
 
     if (analysis.terms) {
@@ -34,9 +35,11 @@ function buildRegexTerms(analysis) {
     }
 
     if (analysis.methodologies) {
-        analysis.methodologies.forEach(({ term, definition }) => {
-            if (term && definition) {
-                termMap[term.toLowerCase()] = definition;
+        console.log("analysis methodologies:", analysis.methodologies)
+        analysis.methodologies.forEach(({ methodology, definition }) => {
+            console.log(methodology);
+            if (methodology && definition) {
+                termMap[methodology.toLowerCase()] = definition;
             }
         });
     }
@@ -44,6 +47,7 @@ function buildRegexTerms(analysis) {
     const regexTerms = Object.keys(termMap).map(term =>
     term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
     );
+    console.log("TermMap:", termMap);
     console.log("TERMS WTF:", regexTerms);
 
     return {
@@ -85,13 +89,44 @@ function wrapMatchesInHighlights(regexMatchesArray, termMap) {
         const span = document.createElement('span');
         span.className = 'highlighted-term';
         span.textContent = term;
-        span.setAttribute('data-definition', termMap[term.toLocaleLowerCase()]);
+        span.setAttribute('term-definition', termMap[term.toLocaleLowerCase()]);
         range.deleteContents();
         range.insertNode(span);
         console.log("Inserting span for:", term);
         console.log("Start-End:", start, end);
     }
-    // console.log("elo");
+}
+
+function setupTooltips() {
+    console.log("In setupTooltips");
+    const tooltip = document.createElement('div');
+    tooltip.className = 'tooltip tooltip-visibility';
+    document.body.appendChild(tooltip);
+
+    const terms = document.querySelectorAll('.highlighted-term');
+    console.log("terms in tooltips:", terms);
+
+    document.querySelectorAll('.highlighted-term').forEach(term => {
+        term.addEventListener('mouseenter', (event => {
+            tooltip.classList.remove('tooltip-visibility');
+            const termDefinition = event.target.getAttribute('term-definition')
+            const tooltipShape = event.target.getBoundingClientRect(); 
+
+            tooltip.textContent = termDefinition;
+            tooltip.style.top = `${tooltipShape.bottom + window.scrollY + 8}px`;
+            tooltip.style.left = `${tooltipShape.left + window.scrollX}px`;
+            console.log("tooltip");
+            console.log("top:", tooltipShape.bottom, "scrollY:", window.scrollY);
+
+        }) );
+
+        term.addEventListener('mouseleave', () => {
+            tooltip.classList.add('tooltip-visibility');
+            console.log("left");
+        });
+    })
+
+
 }
 
 function applyAnalysisAsHighlights(analysis) {
@@ -101,7 +136,7 @@ function applyAnalysisAsHighlights(analysis) {
 
     textNodesArray.forEach(node => {
         const parent = node.parentNode;
-        if (!parent || parent.closest('script, style, noscript') || parent.classList?.contains ('highlighted-term')) return;
+        if (!parent || parent.closest('script, style, noscript') || parent.classList?.contains('highlighted-term')) return;
 
         const regexMatchesArray = findRegexMatches(node, regex);
         termMatches = termMatches.concat(regexMatchesArray);
@@ -109,8 +144,13 @@ function applyAnalysisAsHighlights(analysis) {
     });
 
     wrapMatchesInHighlights(termMatches, termMap);
-    console.log("JSON OUTPUTE TO UNDDERSTAND:",analysis)
+    console.log("JSON OUTPUTE TO UNDDERSTAND:",analysis);
+    setupTooltips();
 }
+
+
+
+
 
 function handleMessage(message, sender, sendResponse) {
     console.log("message received:", message);
@@ -129,7 +169,7 @@ function handleMessage(message, sender, sendResponse) {
 
 // Listens for queue to send abstract text to popup.js via messaging
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
-    console.log("msg received");
+    console.log("msg received:", message);
     await handleMessage(message, sender, sendResponse);
     return true;
 })

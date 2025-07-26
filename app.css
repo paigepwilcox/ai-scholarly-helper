@@ -58,3 +58,17 @@ button {
     background-color: rgb(245, 109, 109);
     font-weight: bolder;
 }
+
+.tooltip {
+    background: white;
+    position: absolute;
+    padding: 6px 10px;
+    border-radius: 5px;
+    max-width: 300px;
+    z-index: 999999;
+    pointer-events: none;
+}
+
+.tooltip-visibility {
+    display: none;
+}

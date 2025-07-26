@@ -27,6 +27,7 @@ Stretch Goals:
 - A user can place words or phrases in 2 categories: know, learning. The ones that are known are omitted from the output
 - refactor frontend to be in react
 - Implement Prompt caching
+- Instead of using innerHTML use the Range api
 
 User Journey:
 1. Opens chrome extension on a PubMed journal 
@@ -36,7 +37,7 @@ User Journey:
 
 
 
-
+** to run: python3 manage.py runserver
 
 
 
@@ -81,16 +82,25 @@ Day 6–7: Add ChatGPT API Integration 6/27
 - ✅ Prompt it to extract & define:
   - ✅ Specialized terms
   - ✅ Complex methodologies
--  Return structured response to extension
+-  ✅ Return structured response to extension
 
 
 *Week 2: Frontend UI, UX, Testing & Polish*
 
-Day 8–9: Render Definitions in Chrome Extension
-- From API response, inject highlights into DOM for each term
-- On hover/click, display definitions in a tooltip or popup
-- Style tooltips with CSS (optionally use Popper.js or custom CSS)
+Day 8–9: Render Definitions in Chrome Extension 7/21
+- ✅From API response, inject highlights into DOM for each term
+- ✅On hover/click, display definitions in a tooltip or popup
+- ✅Style tooltips with CSS (optionally use Popper.js or custom CSS)
 - Create a collapsable right side page with all terms and toggle for definitions  
+- ✅Traverse DOM and wrap matched terms using <span class="highlighted-term" data-definition="...">term</span>
+
+ ✅Avoid highlighting inside <script>, <style>, or existing highlight spans.
+
+ ✅ Style with CSS for visual clarity (.highlighted-term)
+
+Tooltip/Popup on Hover or Click
+
+ ✅ On hover, show a styled tooltip near cursor or element with innerText = data-definition
 
 Day 10: Improve Caching & Reliability
 - Handle no-definition or API error gracefully in Django & Chrome Extension
@@ -113,7 +123,8 @@ Day 14: Demo & Feedback
 - Document edge cases or v2 features 
 
 
-
+# Learnings
+CSP will block by code 
 
 
 # Notes
@@ -145,6 +156,18 @@ Figures, Tables, References, Supplementary Material<br>
 Work-Flow for mvu
 create model 
 add a path to that model in the urls specific to the app
+
+
+DataFlow:
+User clicks a button in popup →
+popup.js sends a message to content script →
+content script fetches the article section →
+popup.js POSTs to Django →
+Django → ChatGPT → returns JSON →
+popup.js receives response →
+popup.js sends response to content script →
+content script highlights elements in the response in the webpage
+
 
 
 Clarify Data Model 
