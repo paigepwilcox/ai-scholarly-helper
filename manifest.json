@@ -1,11 +1,16 @@
 {
-    "name": "Hello worlds",
+    "name": "AI Scholarly Helper",
     "description": "base level extension",
     "version": "1.0",
     "manifest_version": 3,
     "action": {
         "default_popup": "logged-out.html",
-        "default_icon": "oll.png"
+        "default_icon": "eye_icon.png"
+    },
+    "icons": {
+        "16": "eye_icon.png",
+        "48": "eye_icon.png",
+        "128": "eye_icon.png"
     },
     "permissions": [
         "scripting",
