@@ -159,6 +159,11 @@ function handleMessage(message, sender, sendResponse) {
         sendResponse({ abstract });
     }
 
+    if (message.action === "getSpecializedLanguage") {
+        const abstract = document.querySelector('div.abstract-content.selected')?.innerText.trim();
+        sendResponse({ abstract });
+    }
+
     if (message.action === "applyHighlight") {
         console.log("hit");
         console.log("sender;", sender);
