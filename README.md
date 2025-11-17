@@ -40,6 +40,25 @@ User Journey:
 ** to run: python3 manage.py runserver
 
 
+# Welcome Page
+![welcome-page](welcome-page.png)
+
+# Home Page
+![home-page](front-end.png)
+
+# Specialized Language 
+![opt1](specialized-terms.png)
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Sprint (agile)
