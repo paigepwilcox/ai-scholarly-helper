@@ -23,23 +23,28 @@ function extractTextNodes() {
 
 // Building Regex
 function buildRegexTerms(analysis) {
-    console.log("analysis in build regex terms:", analysis);
+    // console.log("analysis in build regex terms:", analysis);
     const termMap = {};
+    let fallback = "The definition is having trouble loading.";
 
     if (analysis.terms) {
         analysis.terms.forEach(({ term, definition }) => {
             if (term && definition) {
                 termMap[term.toLowerCase()] = definition;
+            } else if (term) {
+                termMap[term.toLowerCase()] = fallback;
             }
         });
     }
 
     if (analysis.methodologies) {
-        console.log("analysis methodologies:", analysis.methodologies)
+        // console.log("analysis methodologies:", analysis.methodologies)
         analysis.methodologies.forEach(({ methodology, definition }) => {
-            console.log(methodology);
+            // console.log(methodology);
             if (methodology && definition) {
                 termMap[methodology.toLowerCase()] = definition;
+            } else if (methodology) {
+                termMap[methodology.toLowerCase()] = fallback;
             }
         });
     }
@@ -92,8 +97,6 @@ function wrapMatchesInHighlights(regexMatchesArray, termMap) {
         span.setAttribute('term-definition', termMap[term.toLocaleLowerCase()]);
         range.deleteContents();
         range.insertNode(span);
-        console.log("Inserting span for:", term);
-        console.log("Start-End:", start, end);
     }
 }
 
