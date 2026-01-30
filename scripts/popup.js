@@ -1,16 +1,15 @@
 // Refactor to use classes?
-
 // AnalyzeAll
 document.getElementById('request-all').addEventListener('click', () => {
 
     chrome.tabs.query({ active: true, currentWindow: true}, (tabs) => {
         chrome.tabs.sendMessage(tabs[0].id, { action: "getAll" }, (response) => {
             if (!response || !response.abstract) {
-                console.error("No abstract available:", response);
+                console.log("No abstract retrieved in 'Request All' call popup.js:", response);
                 return
             }
 
-            fetch("http://localhost:8000/aish/analyze/", {
+            fetch("http://localhost:8000/aish/analyze/questions/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -22,16 +21,14 @@ document.getElementById('request-all').addEventListener('click', () => {
             .then(response => response.json())
             .then(data => {
                 // send message to content script to highlight data 
-                console.log("did it!", data);
-                
                 chrome.tabs.sendMessage(tabs[0].id, {
                     action: "applyHighlight",
                     payload: data
                 });
-                console.log("hit on popupjs");
+                window.close()
             })
             .catch(err => {
-                console.log("An error has occurred when fetching data:", err);
+                console.log("An error has occurred when fetching data in request-all popup.js:", err);
             })
         })
     })
@@ -42,7 +39,7 @@ document.getElementById('specialized-language').addEventListener('click', () => 
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         chrome.tabs.sendMessage( tabs[0].id, { action: "getSpecializedLanguage" }, (response) => {
             if (!response || !response.abstract) {
-                console.error("No Abstract Available", response);
+                console.log("No abstract retrieved in 'Specialized Language' call:", response);
                 return;
             }
 
@@ -61,10 +58,83 @@ document.getElementById('specialized-language').addEventListener('click', () => 
                     action: "applyHighlight",
                     payload: data
                 })
+                window.close();
             })
             .catch(err => {
-                console.log("An error occured while fetching getSpecializedLanguage data: ", err);
+                console.log("An error occured while fetching SpecializedLanguage data in popup.js: ", err);
             })
         } )
     })
 })
+
+// Analyze Methodology
+document.getElementById('methodology').addEventListener('click', () => {
+
+    chrome.tabs.query({ active: true, currentWindow: true}, (tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, { action: "getAll" }, (response) => {
+            if (!response || !response.abstract) {
+                console.log("No abstract retrieved in 'Request All' call:", response);
+                return
+            }
+
+            fetch("http://localhost:8000/aish/methodology/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    section: response.abstract
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // send message to content script to highlight data 
+                chrome.tabs.sendMessage(tabs[0].id, {
+                    action: "applyHighlight",
+                    payload: data
+                });
+                window.close()
+            })
+            .catch(err => {
+                console.log("An error has occurred when fetching data for methodology in popup.js:", err);
+            })
+        })
+    })
+})
+
+// Analyze 
+document.getElementById('active-reading').addEventListener('click', () => {
+
+    chrome.tabs.query({ active: true, currentWindow: true}, (tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, { action: "getAll" }, (response) => {
+            if (!response || !response.abstract) {
+                console.log("No abstract retrieved in 'Request All' call:", response);
+                return
+            }
+
+            fetch("http://localhost:8000/aish/questions/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    section: response.abstract
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // send message to content script to highlight data 
+                chrome.tabs.sendMessage(tabs[0].id, {
+                    action: "applyHighlight",
+                    payload: data
+                });
+                window.close()
+            })
+            .catch(err => {
+                console.log("An error has occurred when fetching data for active-reading in popup.js:", err);
+            })
+        })
+    })
+})
+
+
