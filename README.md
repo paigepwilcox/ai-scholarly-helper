@@ -166,13 +166,13 @@ Day 17: Refactor & Demo & Feedback
 
 
 # Learnings
-CSP will block by code 
-InnerHTML to traverse the dom can break existing js code due to innerhtml reparses 
-Rendering of the Pubmed relative to my own javascript throws off my document.querySelect of the abstract in my content script 
-TreeWalker
-getBoundingClientRect()
-`?.` prevents 'undefined length' errors 
-Open–Closed principle (OCP) -- states that software entities (classes, modules, functions, etc.) should be open for extension but closed for modification
+- CSP will block by code 
+- InnerHTML to traverse the dom can break existing js code due to innerhtml reparses 
+- Rendering of the Pubmed relative to my own javascript throws off my document.querySelect of the abstract in my content script 
+- TreeWalker
+- getBoundingClientRect()
+- `?.` prevents 'undefined length' errors 
+- Open–Closed principle (OCP) -- states that software entities (classes, modules, functions, etc.) should be open for extension but closed for modification
 
 
 # Notes
