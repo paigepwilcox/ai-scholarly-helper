@@ -70,10 +70,11 @@ button {
 }
 
 .tooltip {
-    background: white;
+    background: rgb(250, 209, 158);
     position: absolute;
     padding: 6px 10px;
     border-radius: 5px;
+    box-shadow: rgba(0,0,0,0.3) 0 2px 10px;
     max-width: 300px;
     z-index: 999999;
     pointer-events: none;
