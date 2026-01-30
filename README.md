@@ -121,20 +121,36 @@ Tooltip/Popup on Hover or Click
 
  ✅ On hover, show a styled tooltip near cursor or element with innerText = data-definition
 
-Day 10: Improve Caching & Reliability
-- Handle no-definition or API error gracefully in Django & Chrome Extension
-- Add fallback “no definition found” UI
+Day 10: Fallback UI 01/12/2026
+✅ Identify where tooltip text is set
+✅ Identify where definition data might be missing
+✅ Decide what text represents a “fallback” (e.g. "No definition found")
+✅ Ensure tooltip still renders with fallback text
+Add visual distinction for fallback (color, italics, opacity)
 
-Day 11–12: Extension UI Enhancements
+✅ Identify all places where external data is read
+✅ Identify assumptions (e.g. “this value always exists”)
+✅ Replace assumptions with safe defaults
+✅ Log errors instead of throwing them
+✅ Confirm extension keeps working even with bad payloads
+
+Day 10: Improve Caching & Reliability 01/12/2026
+- ✅ Handle no-definition or API error gracefully in Django & Chrome Extension
+- ✅ Add fallback “no definition found” UI
+
+Day 11–12: Extension UI Enhancements 1/13/26
+- ✅ Clean up views/urls/popup.js/pubmed-content.js make sure all buttons respond correctly and all functions the fetch data have proper error handeling and clear logs
+- ✅ Build out questions for regex terms 
+- Handle questions and answers for a term and style them in tooltips
 - Add loading spinner or "processing" state
 - Style tooltips for clarity, accessibility
-- Update pubmed-content.js to get all available content data 
+- HOLD: Update pubmed-content.js to get all available content data 
 
 Day 13: Testing & Debugging
 - Test on:
   - Abstract-only articles
-  - Full-text articles
-  - Articles with images, PDFs, or special formatting
+  - Design a stable abstraction around DOM readiness
+  - Observe dom mutations with a mutation observer 
   - Fix common DOM bugs or mis-parses
 
 Day 14: Demo & Feedback
@@ -144,6 +160,12 @@ Day 14: Demo & Feedback
 
 # Learnings
 CSP will block by code 
+InnerHTML to traverse the dom can break existing js code due to innerhtml reparses 
+Rendering of the Pubmed relative to my own javascript throws off my document.querySelect of the abstract in my content script 
+TreeWalker
+getBoundingClientRect()
+`?.` prevents 'undefined length' errors 
+Open–Closed principle (OCP) -- states that software entities (classes, modules, functions, etc.) should be open for extension but closed for modification
 
 
 # Notes
