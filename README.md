@@ -112,13 +112,9 @@ Day 8–9: Render Definitions in Chrome Extension 7/21
 - ✅Style tooltips with CSS (optionally use Popper.js or custom CSS)
 - Create a collapsable right side page with all terms and toggle for definitions  
 - ✅Traverse DOM and wrap matched terms using <span class="highlighted-term" data-definition="...">term</span>
-
  ✅Avoid highlighting inside <script>, <style>, or existing highlight spans.
-
  ✅ Style with CSS for visual clarity (.highlighted-term)
-
 Tooltip/Popup on Hover or Click
-
  ✅ On hover, show a styled tooltip near cursor or element with innerText = data-definition
 
 Day 10: Fallback UI 01/12/2026
@@ -127,7 +123,6 @@ Day 10: Fallback UI 01/12/2026
 ✅ Decide what text represents a “fallback” (e.g. "No definition found")
 ✅ Ensure tooltip still renders with fallback text
 Add visual distinction for fallback (color, italics, opacity)
-
 ✅ Identify all places where external data is read
 ✅ Identify assumptions (e.g. “this value always exists”)
 ✅ Replace assumptions with safe defaults
@@ -144,21 +139,32 @@ Day 11–12: Extension UI Enhancements 1/13/26
 - ✅ Handle questions for a term 
 - ✅ style questions in tooltips
 - ✅ Add loading spinner or "processing" state
-- Build out data for answers
-- Style answers so they can be toggeled 
 - When a new button is clicked unhighlight what is highlighted and highlight the new terms 
-- ✅ Style tooltips for clarity, accessibility
+  - There should never be nested .highlighted-term spans
+  - Highlighting should not modify original text permanently
+  - Removing highlights should fully restore original DOM text
+- Only highlight the abstract text, not the full page
+- ✅ Style tooltips for clarity, accessibility 
 
-Day 13: Testing & Debugging
+Day 13-15: Finish handeling api calls and responses
+- Build out data for answers to be handled in the tool tips
+- Answers should be toggled 
+- Style answers in the tooltips  
+- Chain prompts using LangChain to create more precise responses with less hallucinations
+
+Day 16: Testing & Debugging
 - Test on:
   - Abstract-only articles
   - Design a stable abstraction around DOM readiness
   - Observe dom mutations with a mutation observer 
   - Fix common DOM bugs or mis-parses
 
-Day 14: Demo & Feedback
+Day 17: Refactor & Demo & Feedback
 - Show to academics, friends, or peers -> Gather UX feedback
-- Document edge cases or v2 features 
+- Small UX changes (if the feedback applies)
+- Create Demo video 
+- Document edge cases 
+- Consider more features and refactor 
 
 
 # Learnings
