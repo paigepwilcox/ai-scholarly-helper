@@ -117,19 +117,17 @@ Day 8–9: Render Definitions in Chrome Extension 7/21
 Tooltip/Popup on Hover or Click
  ✅ On hover, show a styled tooltip near cursor or element with innerText = data-definition
 
-Day 10: Fallback UI 01/12/2026
-✅ Identify where tooltip text is set
-✅ Identify where definition data might be missing
-✅ Decide what text represents a “fallback” (e.g. "No definition found")
-✅ Ensure tooltip still renders with fallback text
+Day 10: Fallback UI, Improve Caching & Reliability 01/12/2026
+- ✅ Identify where tooltip text is set
+- ✅ Identify where definition data might be missing
+- ✅ Decide what text represents a “fallback” (e.g. "No definition found")
+- ✅ Ensure tooltip still renders with fallback text
 Add visual distinction for fallback (color, italics, opacity)
-✅ Identify all places where external data is read
-✅ Identify assumptions (e.g. “this value always exists”)
-✅ Replace assumptions with safe defaults
-✅ Log errors instead of throwing them
-✅ Confirm extension keeps working even with bad payloads
-
-Day 10: Improve Caching & Reliability 01/12/2026
+- ✅ Identify all places where external data is read
+- ✅ Identify assumptions (e.g. “this value always exists”)
+- ✅ Replace assumptions with safe defaults
+- ✅ Log errors instead of throwing them
+- ✅ Confirm extension keeps working even with bad payloads
 - ✅ Handle no-definition or API error gracefully in Django & Chrome Extension
 - ✅ Add fallback “no definition found” UI
 
