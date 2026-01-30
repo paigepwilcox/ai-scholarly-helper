@@ -1,10 +1,9 @@
 from django.urls import path
-# from . import views
-from .views import Analyze, AnalyzeLanguage, AnalyzeMethodology, AnalyzeWithQuestions
+from .views import AnalyzeWithQuestions, AnalyzeLanguage, AnalyzeMethodology, ActiveReadingQuestions
 
 urlpatterns = [
-    path('analyze/', Analyze.as_view(), name='analyze'),
+    path('analyze/questions/', AnalyzeWithQuestions.as_view(), name='analyze'),
     path('language/', AnalyzeLanguage.as_view(), name='language'),
     path('methodology/', AnalyzeMethodology.as_view(), name='methodology'),
-    path('analyze/questions/', AnalyzeWithQuestions.as_view(), name='analyze-with-questions')
+    path('questions/', ActiveReadingQuestions.as_view(), name='analyze-with-questions')
 ]
