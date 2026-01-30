@@ -1,12 +1,17 @@
-console.log("elo, how are you!!!");
-
+// Querying the article by the standard html tags used in pubmed.
 function getArticle() {
     const abstract = document.querySelector('div.abstract-content.selected')?.innerText.trim();
 
     return abstract;
 }
 
-// DOM Travesrsal 
+// DOM Travesrsal to create an array of textnodes.
+/* Text nodes are the safest way in this case to find words in a text and to wrap texts without breaking pubmeds js; innerhtml would break pubmeds js bc it re-parses, so it is not safe here.     
+To understand answer the following:
+1. What kind of nodes is it collecting?
+2. Why *only* those nodes?
+3. Is this traversal or mutation?
+4. What would break if I used `innerHTML` instead?*/
 function extractTextNodes() {
     const textNodes = document.createTreeWalker(
         document.body,
@@ -23,37 +28,65 @@ function extractTextNodes() {
 
 // Building Regex
 function buildRegexTerms(analysis) {
-    // console.log("analysis in build regex terms:", analysis);
     const termMap = {};
-    let fallback = "The definition is having trouble loading.";
+    let fallbackDefinition = "The definition is having trouble loading.";
+    let fallbackQuestion = "The question and/or answer is having trouble loading."
 
-    if (analysis.terms) {
+    if (analysis.terms?.[0]?.questions) {
+        analysis.terms.forEach(({ term, definition, questions }) => {
+            if (term && definition && questions) {
+                termMap[term.toLocaleLowerCase()] = {term, 'definition': definition, 'questions': questions}
+            } else if (term && definition) {
+                termMap[term.toLocaleLowerCase()] = {term, 'definition': definition, 'questions': fallbackQuestion}
+            } else if (term) {
+                termMap[term.toLocaleLowerCase()] = {term, 'definition': fallbackDefinition, 'questions': fallbackQuestion}
+            }
+        });
+    } else if (analysis.terms) {
         analysis.terms.forEach(({ term, definition }) => {
             if (term && definition) {
-                termMap[term.toLowerCase()] = definition;
+                termMap[term.toLowerCase()] = {'definition': definition};
             } else if (term) {
-                termMap[term.toLowerCase()] = fallback;
+                termMap[term.toLowerCase()] = {'definition': fallbackDefinition};
             }
         });
     }
 
-    if (analysis.methodologies) {
-        // console.log("analysis methodologies:", analysis.methodologies)
-        analysis.methodologies.forEach(({ methodology, definition }) => {
-            // console.log(methodology);
-            if (methodology && definition) {
-                termMap[methodology.toLowerCase()] = definition;
+    if (analysis.methodologies?.[0]?.questions) {
+        analysis.methodologies.forEach(({ methodology, definition, questions }) => {
+            if (methodology && definition && questions) {
+                termMap[methodology.toLocaleLowerCase()] = {'definition': definition, 'questions': questions}
+            } else if (methodology && definition) {
+                termMap[methodology.toLocaleLowerCase()] = {'definition': definition, 'questions': fallbackQuestion}
             } else if (methodology) {
-                termMap[methodology.toLowerCase()] = fallback;
+                termMap[methodology.toLocaleLowerCase()] = {'definition': fallbackDefinition, 'questions': fallbackQuestion}
             }
         });
+    } else if (analysis.methodologies) {
+        analysis.methodologies.forEach(({ methodology, definition }) => {
+            if (methodology && definition) {
+                termMap[methodology.toLowerCase()] = {'definition': definition};
+            } else if (methodology) {
+                termMap[methodology.toLowerCase()] = {'definition': fallbackDefinition};
+            }
+        });
+    }
+
+    if (analysis.questions) {
+        analysis.questions.forEach(({ placeholder, question, answer }) => {
+            if (placeholder && question && answer) {
+                termMap[placeholder] = {'questions': question, 'answer': answer};
+            } else if (placeholder && question) {
+                termMap[placeholder] = {'questions': question, 'answer': fallbackQuestion};
+            } else if (placeholder) {
+                console.log("Question and Answer are not valid for this placeholder:", placeholder)
+            }
+        })
     }
 
     const regexTerms = Object.keys(termMap).map(term =>
     term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
     );
-    console.log("TermMap:", termMap);
-    console.log("TERMS WTF:", regexTerms);
 
     return {
         regex: new RegExp(`\\b(${regexTerms.join('|')})\\b`, 'gi'),
@@ -75,16 +108,15 @@ function findRegexMatches(node, regex) {
             end: matchObj.index + matchObj[0].length,
             node
         });
-        console.log("Regex used:", regex);
-        console.log("Text node:", node.nodeValue);
-        console.log("Match found:", matchObj);
     }
 
     return regexMatchesArray;
 }
 
-// DOM Manipulation !!! Using Range instead of innerHTML due to innerHTML breaking pubmed's JS !!!!!
+// DOM Manipulation 
+// !!! Using Range instead of innerHTML due to innerHTML breaking pubmed's JS !!!!!
 function wrapMatchesInHighlights(regexMatchesArray, termMap) {
+    console.log("WRAPPING");
     for (let i = regexMatchesArray.length -1; i >= 0; i--) {
         const { term, start, end, node } = regexMatchesArray[i];
         const range = document.createRange();
@@ -92,46 +124,75 @@ function wrapMatchesInHighlights(regexMatchesArray, termMap) {
         range.setEnd(node, end);
 
         const span = document.createElement('span');
-        span.className = 'highlighted-term';
         span.textContent = term;
-        span.setAttribute('term-definition', termMap[term.toLocaleLowerCase()]);
+        span.className = 'highlighted-term';
+        span._analysis = {
+            term,
+            "definition": termMap[term.toLocaleLowerCase()]?.definition ?? null,
+            "questions": termMap[term.toLocaleLowerCase()]?.questions ?? null,
+            "answers": termMap[term.toLocaleLowerCase()]?.answers ?? null
+        }
+
         range.deleteContents();
         range.insertNode(span);
     }
 }
 
+function buildTooltipContent(analysis) {
+    let html = '';
+
+    if (analysis.definition) {
+        html += `<div class="tooltip-definition">${analysis.definition}</div>`
+    }
+
+    if (analysis.questions) {
+        html += `<ul class="tooltip-questions"><li>${analysis.questions}</li></ul>`;
+    }
+
+    return html || '<div>No definition found</div>';
+}
+
 function setupTooltips() {
-    console.log("In setupTooltips");
     const tooltip = document.createElement('div');
     tooltip.className = 'tooltip tooltip-visibility';
     document.body.appendChild(tooltip);
 
     const terms = document.querySelectorAll('.highlighted-term');
-    console.log("terms in tooltips:", terms);
-
-    document.querySelectorAll('.highlighted-term').forEach(term => {
+    terms.forEach(term => {
         term.addEventListener('mouseenter', (event => {
+            const analysis = event.currentTarget._analysis;
+
+            if (!analysis) {
+                return;
+            }
+
             tooltip.classList.remove('tooltip-visibility');
-            const termDefinition = event.target.getAttribute('term-definition')
+            tooltip.innerHTML = buildTooltipContent(analysis);
+
             const tooltipShape = event.target.getBoundingClientRect(); 
-
-            tooltip.textContent = termDefinition;
-            tooltip.style.top = `${tooltipShape.bottom + window.scrollY + 8}px`;
+             tooltip.style.top = `${tooltipShape.bottom + window.scrollY + 8}px`;
             tooltip.style.left = `${tooltipShape.left + window.scrollX}px`;
-            console.log("tooltip");
-            console.log("top:", tooltipShape.bottom, "scrollY:", window.scrollY);
-
         }) );
 
         term.addEventListener('mouseleave', () => {
             tooltip.classList.add('tooltip-visibility');
-            console.log("left");
         });
     })
 
 
 }
 
+/**
+ * 
+ * @param {*} analysis 
+ * termpMap shape 
+ * {
+  term: string,
+  definition: string | null,
+  questions: string[] | null,
+  answers: string[] | null
+}
+ */
 function applyAnalysisAsHighlights(analysis) {
     const textNodesArray = extractTextNodes();
     const { regex, termMap } = buildRegexTerms(analysis);
@@ -147,7 +208,6 @@ function applyAnalysisAsHighlights(analysis) {
     });
 
     wrapMatchesInHighlights(termMatches, termMap);
-    console.log("JSON OUTPUTE TO UNDDERSTAND:",analysis);
     setupTooltips();
 }
 
@@ -156,7 +216,6 @@ function applyAnalysisAsHighlights(analysis) {
 
 
 function handleMessage(message, sender, sendResponse) {
-    console.log("message received:", message);
     if (message.action === "getAll") {
         const abstract = document.querySelector('div.abstract-content.selected')?.innerText.trim(); // only targets abstract for now
         sendResponse({ abstract });
@@ -168,8 +227,6 @@ function handleMessage(message, sender, sendResponse) {
     }
 
     if (message.action === "applyHighlight") {
-        console.log("hit");
-        console.log("sender;", sender);
         applyAnalysisAsHighlights(message.payload)
         sendResponse(true);
     }
@@ -177,7 +234,6 @@ function handleMessage(message, sender, sendResponse) {
 
 // Listens for queue to send abstract text to popup.js via messaging
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
-    console.log("msg received:", message);
     await handleMessage(message, sender, sendResponse);
     return true;
 })
