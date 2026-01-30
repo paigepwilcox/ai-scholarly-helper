@@ -84,17 +84,17 @@ WSGI_APPLICATION = 'ai_scholarly_helper_backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-print(env('POSTGRESQL_USER'), "psql user")
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ai_scholarly_helper_test',
-        'USER': env('POSTGRESQL_USER'),
-        'PASSWORD': env('POSTGRESQL_PASSWORD'),
-        'HOST': 'localhost',  # Or the IP address of your PostgreSQL server
-        'PORT': '', 
-    }
-}
+# print(env('POSTGRESQL_USER'), "psql user")
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'ai_scholarly_helper_test',
+#         'USER': env('POSTGRESQL_USER'),
+#         'PASSWORD': env('POSTGRESQL_PASSWORD'),
+#         'HOST': 'localhost',  # Or the IP address of your PostgreSQL server
+#         'PORT': '', 
+#     }
+# }
 
 
 # Password validation
