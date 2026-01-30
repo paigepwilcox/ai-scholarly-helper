@@ -22,7 +22,7 @@
         {
             "matches": ["https://pubmed.ncbi.nlm.nih.gov/*"],
             "js": ["scripts/pubmed-content.js"],
-            "css": ["app.css"]
+            "css": ["styles/app.css"]
         }
     ]
 }

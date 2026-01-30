@@ -1,0 +1,118 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    width: 300px;
+    height: 400px;
+    margin: 15px;
+    background: #222d30;
+}
+
+header {
+    border-bottom: #02427a solid 2px;
+    /* box-shadow: 0px 2px 16px -8px #02427a; */
+}
+
+.header {
+    display: flex;
+
+}
+
+.welcome-message {
+    color: #3ab6eb;
+}
+
+.welcome-message p {
+    color: white;
+}
+
+.logged-out-nav li {
+    border: 2px solid #02427a;
+    padding: 2px;
+    margin: 2px;
+    background: #02427a;
+    color: white;
+    list-style-type: none;
+}
+
+.logged-out-nav a {
+    color: white;
+}
+
+a:hover {
+    color: rgb(203, 203, 5);
+}
+
+/* #094d66 */
+
+main h3, h4 {
+    color: white;
+    text-align: center;
+}
+
+.button-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+button {
+    padding: 4px;
+    margin: 2px;
+    background: #02427a;
+    color: white;
+}
+
+.highlighted-term {
+    background-color: rgb(245, 109, 109);
+    font-weight: bolder;
+}
+
+.tooltip {
+    background: rgb(250, 209, 158);
+    position: absolute;
+    padding: 6px 10px;
+    border-radius: 5px;
+    box-shadow: rgba(0,0,0,0.3) 0 2px 10px;
+    max-width: 300px;
+    z-index: 999999;
+    pointer-events: none;
+}
+
+.tooltip-visibility {
+    display: none;
+}
+
+.overlay {
+    position: absolute;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 300px;
+    height: 400px;
+    background: #222d30;
+}
+
+.spinner {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    border: 16px solid rgb(0, 0, 74);
+    border-top: 16px solid rgb(46, 189, 246);
+    border-radius: 50%;
+    animation: spin 1.5s linear infinite;
+}
+
+.overlay-visibility {
+    display: none;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

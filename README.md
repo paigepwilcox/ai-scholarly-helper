@@ -141,10 +141,13 @@ Day 10: Improve Caching & Reliability 01/12/2026
 Day 11–12: Extension UI Enhancements 1/13/26
 - ✅ Clean up views/urls/popup.js/pubmed-content.js make sure all buttons respond correctly and all functions the fetch data have proper error handeling and clear logs
 - ✅ Build out questions for regex terms 
-- Handle questions and answers for a term and style them in tooltips
-- Add loading spinner or "processing" state
-- Style tooltips for clarity, accessibility
-- HOLD: Update pubmed-content.js to get all available content data 
+- ✅ Handle questions for a term 
+- ✅ style questions in tooltips
+- ✅ Add loading spinner or "processing" state
+- Build out data for answers
+- Style answers so they can be toggeled 
+- When a new button is clicked unhighlight what is highlighted and highlight the new terms 
+- ✅ Style tooltips for clarity, accessibility
 
 Day 13: Testing & Debugging
 - Test on:

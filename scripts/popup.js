@@ -1,10 +1,25 @@
+function startLoading() {
+    //toggle spinner
+    const spinner_overlay = document.querySelector('.overlay');
+    spinner_overlay.classList.remove('overlay-visibility');
+}
+
+function stopLoading() {
+    const spinner_overlay = document.querySelector('.overlay');
+    spinner_overlay.classList.add('overlay-visibility');
+}
+
 // Refactor to use classes?
 // AnalyzeAll
 document.getElementById('request-all').addEventListener('click', () => {
 
+    //toggle spinner
+    startLoading();
+
     chrome.tabs.query({ active: true, currentWindow: true}, (tabs) => {
         chrome.tabs.sendMessage(tabs[0].id, { action: "getAll" }, (response) => {
             if (!response || !response.abstract) {
+                stopLoading();
                 console.log("No abstract retrieved in 'Request All' call popup.js:", response);
                 return
             }
@@ -25,9 +40,11 @@ document.getElementById('request-all').addEventListener('click', () => {
                     action: "applyHighlight",
                     payload: data
                 });
+                stopLoading();
                 window.close()
             })
             .catch(err => {
+                stopLoading();
                 console.log("An error has occurred when fetching data in request-all popup.js:", err);
             })
         })
@@ -36,6 +53,7 @@ document.getElementById('request-all').addEventListener('click', () => {
 
 // Specialized Language
 document.getElementById('specialized-language').addEventListener('click', () => {
+    startLoading();
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         chrome.tabs.sendMessage( tabs[0].id, { action: "getSpecializedLanguage" }, (response) => {
             if (!response || !response.abstract) {
@@ -58,9 +76,11 @@ document.getElementById('specialized-language').addEventListener('click', () => 
                     action: "applyHighlight",
                     payload: data
                 })
+                stopLoading();
                 window.close();
             })
             .catch(err => {
+                stopLoading();
                 console.log("An error occured while fetching SpecializedLanguage data in popup.js: ", err);
             })
         } )
@@ -69,7 +89,7 @@ document.getElementById('specialized-language').addEventListener('click', () => 
 
 // Analyze Methodology
 document.getElementById('methodology').addEventListener('click', () => {
-
+    startLoading();
     chrome.tabs.query({ active: true, currentWindow: true}, (tabs) => {
         chrome.tabs.sendMessage(tabs[0].id, { action: "getAll" }, (response) => {
             if (!response || !response.abstract) {
@@ -93,9 +113,11 @@ document.getElementById('methodology').addEventListener('click', () => {
                     action: "applyHighlight",
                     payload: data
                 });
+                stopLoading();
                 window.close()
             })
             .catch(err => {
+                stopLoading();
                 console.log("An error has occurred when fetching data for methodology in popup.js:", err);
             })
         })
@@ -104,7 +126,7 @@ document.getElementById('methodology').addEventListener('click', () => {
 
 // Analyze 
 document.getElementById('active-reading').addEventListener('click', () => {
-
+    startLoading();
     chrome.tabs.query({ active: true, currentWindow: true}, (tabs) => {
         chrome.tabs.sendMessage(tabs[0].id, { action: "getAll" }, (response) => {
             if (!response || !response.abstract) {
@@ -128,9 +150,11 @@ document.getElementById('active-reading').addEventListener('click', () => {
                     action: "applyHighlight",
                     payload: data
                 });
+                stopLoading();
                 window.close()
             })
             .catch(err => {
+                stopLoading();
                 console.log("An error has occurred when fetching data for active-reading in popup.js:", err);
             })
         })
