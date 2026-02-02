@@ -163,16 +163,25 @@ Day 17: Refactor & Demo & Feedback
 - Create Demo video 
 - Document edge cases 
 - Consider more features and refactor 
+  - ask more about this topic, suggest questions that would help understand the topic better (") 
 
 
 # Learnings
-- CSP will block by code 
+- CSP will block code 
 - InnerHTML to traverse the dom can break existing js code due to innerhtml reparses 
 - Rendering of the Pubmed relative to my own javascript throws off my document.querySelect of the abstract in my content script 
-- TreeWalker
+- TreeWalker is for searching
 - getBoundingClientRect()
 - `?.` prevents 'undefined length' errors 
 - Open–Closed principle (OCP) -- states that software entities (classes, modules, functions, etc.) should be open for extension but closed for modification
+- when removing the highlights you cannot only remove the span tag because this will remove the text the span encompasses, instead replace the span tag with a text node. Think of highlighting as:
+Text → Text + Annotation
+So removal must be:
+Text + Annotation → Text
+  - What happens if I click “Highlight” 5 times?
+  - What if PubMed re-renders part of the page?
+  - What if I remove highlights mid-scroll?
+- 
 
 
 # Notes
