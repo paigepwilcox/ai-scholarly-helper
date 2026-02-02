@@ -28,6 +28,7 @@ function extractTextNodes() {
 
 // Building Regex
 function buildRegexTerms(analysis) {
+    console.log("ANALYSIS:", analysis);
     const termMap = {};
     let fallbackDefinition = "The definition is having trouble loading.";
     let fallbackQuestion = "The question and/or answer is having trouble loading."
@@ -113,6 +114,11 @@ function findRegexMatches(node, regex) {
     return regexMatchesArray;
 }
 
+/**
+ * 
+ * @param {*} regexMatchesArray 
+ * @param {*} termMap 
+ */
 // DOM Manipulation 
 // !!! Using Range instead of innerHTML due to innerHTML breaking pubmed's JS !!!!!
 function wrapMatchesInHighlights(regexMatchesArray, termMap) {
@@ -170,7 +176,7 @@ function setupTooltips() {
             tooltip.innerHTML = buildTooltipContent(analysis);
 
             const tooltipShape = event.target.getBoundingClientRect(); 
-             tooltip.style.top = `${tooltipShape.bottom + window.scrollY + 8}px`;
+            tooltip.style.top = `${tooltipShape.bottom + window.scrollY + 8}px`;
             tooltip.style.left = `${tooltipShape.left + window.scrollX}px`;
         }) );
 
@@ -211,9 +217,22 @@ function applyAnalysisAsHighlights(analysis) {
     setupTooltips();
 }
 
+/**
+ * Replace each .highlighted-term element with a text node of its own text.
+ */
+function removeHighlights() {
+    console.log("UNWRAPPING");
+    const highlightedTerms = document.querySelectorAll('.highlighted-term');
+    if (!highlightedTerms) return console.log('No highlighted terms exist');
 
-
-
+    highlightedTerms.forEach(term => {
+        const parent = term.parentElement;
+        const text = term.textContent;
+        const replacementNode = document.createTextNode(text);
+        parent.replaceChild(replacementNode, term);
+        parent.normalize();
+    })
+}
 
 function handleMessage(message, sender, sendResponse) {
     if (message.action === "getAll") {
@@ -227,6 +246,7 @@ function handleMessage(message, sender, sendResponse) {
     }
 
     if (message.action === "applyHighlight") {
+        removeHighlights();
         applyAnalysisAsHighlights(message.payload)
         sendResponse(true);
     }
