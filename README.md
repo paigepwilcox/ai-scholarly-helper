@@ -137,11 +137,11 @@ Day 11–12: Extension UI Enhancements 1/13/26
 - ✅ Handle questions for a term 
 - ✅ style questions in tooltips
 - ✅ Add loading spinner or "processing" state
-- When a new button is clicked unhighlight what is highlighted and highlight the new terms 
+- ✅ When a new button is clicked unhighlight what is highlighted and highlight the new terms 
   - There should never be nested .highlighted-term spans
   - Highlighting should not modify original text permanently
   - Removing highlights should fully restore original DOM text
-- Only highlight the abstract text, not the full page
+- ✅ Only highlight the abstract text, not the full page
 - ✅ Style tooltips for clarity, accessibility 
 
 Day 13-15: Finish handeling api calls and responses
