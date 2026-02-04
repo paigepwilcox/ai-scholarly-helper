@@ -58,6 +58,7 @@ document.getElementById('specialized-language').addEventListener('click', () => 
         chrome.tabs.sendMessage( tabs[0].id, { action: "getSpecializedLanguage" }, (response) => {
             if (!response || !response.abstract) {
                 console.log("No abstract retrieved in 'Specialized Language' call:", response);
+                stopLoading();
                 return;
             }
 
