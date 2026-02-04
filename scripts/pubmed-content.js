@@ -26,29 +26,22 @@ To understand answer the following:
 function extractTextNodes(rootNode = document.body) {
     console.log("extracting");
     const abstractRoot = getAbstractRoot();
-    // console.log('Abstract root at start:', abstractRoot);
-    // console.log('TreeWalker root:', abstractRoot);
 
-    // setTimeout(() => {
-    //     console.log('Abstract root after 2s:', getAbstractRoot());
-    // }, 2000);
     if (!abstractRoot) console.log("abstractRoot is flasey in extractTextNodes: ", abstractRoot);
     const abstractRootNode = document.querySelector('div.abstract');
-    // console.log('Abstract Root is:', abstractRootNode);
-    // console.log('Root Node: ', rootNode);
 
     const textNodes = document.createTreeWalker(
         abstractRoot,
         NodeFilter.SHOW_TEXT,
 
     );
-    // console.log("HELP textNodes: ", textNodes);
+
     const textNodesArray = [];
 
     while (textNodes.nextNode()) {
         textNodesArray.push(textNodes.currentNode);
     }
-    // console.log('Direct abstract text nodes:', textNodesArray);
+
     return textNodesArray;
 }
 
@@ -60,16 +53,9 @@ function getAbstractTextNodes() {
         return [];
     }
 
-    // console.log("abstractRoot in getAbstractTextNodes: ", abstractRoot);
-    // console.log('Abstract textContent snapshot: ', abstractRoot?.textContent?.slice(0, 200));
     const allTextNodes = extractTextNodes(document.body);
-    // console.log("allTextNodes in getAbstracttextnodes: ", allTextNodes)
     return allTextNodes.filter(node => {
-        // console.log("CHECKING ITERATION: NODE, ABSTRACTROOT: ", node, abstractRoot);
-        // console.log('node textContent:', node.textContent);
-        // console.log('abstract HTML includes:', abstractRoot.innerHTML.includes(node.textContent));
         let result = isNodeInsideAbstract(node, abstractRoot);
-        console.log("RESULT: ", result);
         return result;
    } );
 }
@@ -142,8 +128,6 @@ function buildRegexTerms(analysis) {
         term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
     );
 
-    // console.log("REGEX TERMS WTF: ", regexTerms);
-
     return {
         regex: new RegExp(`(${regexTerms.join('|')})`, 'gi'),
         // regex: new RegExp(`\\b(${regexTerms.join('|')})\\b`, 'gi'),
@@ -153,9 +137,7 @@ function buildRegexTerms(analysis) {
 
 // Text Matching
 function findRegexMatches(node, regex) {
-    console.log("NODE, REGEX: ", node, regex);
     const text = node.nodeValue;
-    console.log("TEXT IN findRegexMatches: ", text);
     let matchObj; 
     const regexMatchesArray = [];
     regex.lastIndex = 0;
@@ -181,8 +163,6 @@ function findRegexMatches(node, regex) {
 // !!! Using Range instead of innerHTML due to innerHTML breaking pubmed's JS !!!!!
 function wrapMatchesInHighlights(regexMatchesArray, termMap) {
     console.log("WRAPPING");
-    console.log("regex matches: ", regexMatchesArray);
-    console.log("TERMMAPPP: ", termMap)
     for (let i = regexMatchesArray.length -1; i >= 0; i--) {
         const { term, start, end, node } = regexMatchesArray[i];
         const range = document.createRange();
@@ -210,7 +190,6 @@ function wrapMatchesInHighlights(regexMatchesArray, termMap) {
  * @returns 
  */
 function buildTooltipContent(analysis) {
-    console.log("ANALYSISSSSS:", analysis);
     let html = '';
 
     if (analysis.definition) {
@@ -272,22 +251,16 @@ function applyAnalysisAsHighlights(analysis) {
     const abstractNodesArray = getAbstractTextNodes();
     // const textNodesArray = extractTextNodes();
     const { regex, termMap } = buildRegexTerms(analysis);
-    // console.log("REGEX: ", regex);
-    console.log("Abstract Text Nodes: ", abstractNodesArray);
     let termMatches = [];
 
     abstractNodesArray.forEach(node => {
         const parent = node.parentNode;
-        console.log('PARENT VARIABLE: ', parent);
         if (!parent || parent.closest('script, style, noscript') || parent.classList?.contains('highlighted-term')) return;
 
         const regexMatchesArray = findRegexMatches(node, regex);
         termMatches = termMatches.concat(regexMatchesArray);
 
     });
-
-    // console.log("termMatches: ", termMatches);
-    // console.log("termMap:", termMap);
 
     wrapMatchesInHighlights(termMatches, termMap);
     setupTooltips();
@@ -318,13 +291,11 @@ function handleMessage(message, sender, sendResponse) {
 
     if (message.action === "getSpecializedLanguage") {
         const abstract = document.querySelector('div.abstract-content.selected')?.innerText.trim();
-        console.log("abstract in handleMessage function: ", abstract);
         sendResponse({ abstract });
     }
 
     if (message.action === "applyHighlight") {
         removeHighlights();
-        console.log("MESSAGE PAYLOAD IN HANDLE MSG: ", message.payload);
         applyAnalysisAsHighlights(message.payload)
         sendResponse(true);
     }
