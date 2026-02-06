@@ -118,9 +118,9 @@ function buildRegexTerms(analysis) {
         analysis.questions.forEach(({ placeholder, question, answer }) => {
             const lowerCasedPlaceholdeer = placeholder.toLocaleLowerCase();
             if (placeholder && question && answer) {
-                termMap[lowerCasedPlaceholdeer] = {lowerCasedPlaceholdeer, 'questions': question, 'answer': answer};
+                termMap[lowerCasedPlaceholdeer] = {'questions': question, 'answer': answer};
             } else if (placeholder && question) {
-                termMap[lowerCasedPlaceholdeer] = {lowerCasedPlaceholdeer, 'questions': question, 'answer': fallbackQuestion};
+                termMap[lowerCasedPlaceholdeer] = {'questions': question, 'answer': fallbackQuestion};
             } else if (lowerCasedPlaceholdeer) {
                 console.log("Question and Answer are not valid for this placeholder:", placeholder)
             }
