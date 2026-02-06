@@ -73,14 +73,14 @@ function buildRegexTerms(analysis) {
     let fallbackQuestion = "The question and/or answer is having trouble loading."
 
     if (analysis.terms?.[0]?.questions) {
-        analysis.terms.forEach(({ term, definition, questions }) => {
+        analysis.terms.forEach(({ term, definition, questions, answers }) => {
             const lowerCasedTerm = term.toLocaleLowerCase();
             if (term && definition && questions) {
-                termMap[lowerCasedTerm] = {lowerCasedTerm, 'definition': definition, 'questions': questions}
+                termMap[lowerCasedTerm] = {lowerCasedTerm, 'definition': definition, 'questions': questions, 'answers': answers}
             } else if (term && definition) {
-                termMap[lowerCasedTerm] = {lowerCasedTerm, 'definition': definition, 'questions': fallbackQuestion}
+                termMap[lowerCasedTerm] = {lowerCasedTerm, 'definition': definition, 'questions': fallbackQuestion, 'answers': fallbackDefinition}
             } else if (term) {
-                termMap[lowerCasedTerm] = {lowerCasedTerm, 'definition': fallbackDefinition, 'questions': fallbackQuestion}
+                termMap[lowerCasedTerm] = {lowerCasedTerm, 'definition': fallbackDefinition, 'questions': fallbackQuestion, 'answers': fallbackDefinition}
             }
         });
     } else if (analysis.terms) {
@@ -115,12 +115,12 @@ function buildRegexTerms(analysis) {
     }
 
     if (analysis.questions) {
-        analysis.questions.forEach(({ placeholder, question, answer }) => {
+        analysis.questions.forEach(({ placeholder, question, answers }) => {
             const lowerCasedPlaceholdeer = placeholder.toLocaleLowerCase();
-            if (placeholder && question && answer) {
-                termMap[lowerCasedPlaceholdeer] = {'questions': question, 'answer': answer};
+            if (placeholder && question && answers) {
+                termMap[lowerCasedPlaceholdeer] = {'questions': question, 'answers': answers};
             } else if (placeholder && question) {
-                termMap[lowerCasedPlaceholdeer] = {'questions': question, 'answer': fallbackQuestion};
+                termMap[lowerCasedPlaceholdeer] = {'questions': question, 'answers': fallbackQuestion};
             } else if (lowerCasedPlaceholdeer) {
                 console.log("Question and Answer are not valid for this placeholder:", placeholder)
             }
@@ -179,7 +179,7 @@ function wrapMatchesInHighlights(regexMatchesArray, termMap) {
             term,
             "definition": termMap[term.toLocaleLowerCase()]?.definition ?? null,
             "questions": termMap[term.toLocaleLowerCase()]?.questions ?? null,
-            "answers": termMap[term.toLocaleLowerCase()]?.answer ?? null
+            "answers": termMap[term.toLocaleLowerCase()]?.answers ?? null
         }
 
         range.deleteContents();
@@ -222,8 +222,13 @@ function buildTooltipContent(analysis) {
         definition.textContent = analysis.definition;
         htmlElement.appendChild(definition);
     }
-
-    if (analysis.questions.length > 1 && analysis.answers.length > 1) {
+    console.log("HERE")
+    if (analysis.questions === null || analysis.questions == []) {
+        return htmlElement;
+    }
+    console.log("here?")
+    if (analysis.questions?.length > 1 && analysis.answers?.length > 1) {
+        console.log("why is it not here?");
         questionList.className = 'tooltip-questions';
         htmlElement.appendChild(questionList);
         for (let index = 0; index < analysis.questions.length; index ++) {
