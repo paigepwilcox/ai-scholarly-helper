@@ -77,11 +77,23 @@ button {
     box-shadow: rgba(0,0,0,0.3) 0 2px 10px;
     max-width: 300px;
     z-index: 999999;
-    pointer-events: none;
+    /* pointer-events: none; */
 }
 
 .tooltip-visibility {
     display: none;
+}
+
+.answer-btn-li {
+    list-style-type: none;
+}
+
+.tooltip-show-answer-btn {
+    border-radius: 30%;
+    max-width: min-content;
+    font-size: x-small;
+    background-color: #3ab6eb;
+
 }
 
 .overlay {

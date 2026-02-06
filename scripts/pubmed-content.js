@@ -74,20 +74,22 @@ function buildRegexTerms(analysis) {
 
     if (analysis.terms?.[0]?.questions) {
         analysis.terms.forEach(({ term, definition, questions }) => {
+            const lowerCasedTerm = term.toLocaleLowerCase();
             if (term && definition && questions) {
-                termMap[term.toLocaleLowerCase()] = {term, 'definition': definition, 'questions': questions}
+                termMap[lowerCasedTerm] = {lowerCasedTerm, 'definition': definition, 'questions': questions}
             } else if (term && definition) {
-                termMap[term.toLocaleLowerCase()] = {term, 'definition': definition, 'questions': fallbackQuestion}
+                termMap[lowerCasedTerm] = {lowerCasedTerm, 'definition': definition, 'questions': fallbackQuestion}
             } else if (term) {
-                termMap[term.toLocaleLowerCase()] = {term, 'definition': fallbackDefinition, 'questions': fallbackQuestion}
+                termMap[lowerCasedTerm] = {lowerCasedTerm, 'definition': fallbackDefinition, 'questions': fallbackQuestion}
             }
         });
     } else if (analysis.terms) {
         analysis.terms.forEach(({ term, definition }) => {
+            const lowerCasedTerm = term.toLocaleLowerCase();
             if (term && definition) {
-                termMap[term.toLowerCase()] = {'definition': definition};
+                termMap[lowerCasedTerm] = {lowerCasedTerm, 'definition': definition};
             } else if (term) {
-                termMap[term.toLowerCase()] = {'definition': fallbackDefinition};
+                termMap[lowerCasedTerm] = {lowerCasedTerm, 'definition': fallbackDefinition};
             }
         });
     }
@@ -114,11 +116,12 @@ function buildRegexTerms(analysis) {
 
     if (analysis.questions) {
         analysis.questions.forEach(({ placeholder, question, answer }) => {
+            const lowerCasedPlaceholdeer = placeholder.toLocaleLowerCase();
             if (placeholder && question && answer) {
-                termMap[placeholder] = {'questions': question, 'answer': answer};
+                termMap[lowerCasedPlaceholdeer] = {lowerCasedPlaceholdeer, 'questions': question, 'answer': answer};
             } else if (placeholder && question) {
-                termMap[placeholder] = {'questions': question, 'answer': fallbackQuestion};
-            } else if (placeholder) {
+                termMap[lowerCasedPlaceholdeer] = {lowerCasedPlaceholdeer, 'questions': question, 'answer': fallbackQuestion};
+            } else if (lowerCasedPlaceholdeer) {
                 console.log("Question and Answer are not valid for this placeholder:", placeholder)
             }
         })
@@ -156,11 +159,11 @@ function findRegexMatches(node, regex) {
 
 /**
  * 
- * @param {*} regexMatchesArray 
- * @param {*} termMap 
+ * @param {[]} regexMatchesArray 
+ * @param { {term, definition: string} } termMap 
  */
 // DOM Manipulation 
-// !!! Using Range instead of innerHTML due to innerHTML breaking pubmed's JS !!!!!
+// Using Range instead of innerHTML due to innerHTML breaking pubmed's JS 
 function wrapMatchesInHighlights(regexMatchesArray, termMap) {
     console.log("WRAPPING");
     for (let i = regexMatchesArray.length -1; i >= 0; i--) {
@@ -176,37 +179,84 @@ function wrapMatchesInHighlights(regexMatchesArray, termMap) {
             term,
             "definition": termMap[term.toLocaleLowerCase()]?.definition ?? null,
             "questions": termMap[term.toLocaleLowerCase()]?.questions ?? null,
-            "answers": termMap[term.toLocaleLowerCase()]?.answers ?? null
+            "answers": termMap[term.toLocaleLowerCase()]?.answer ?? null
         }
 
         range.deleteContents();
         range.insertNode(span);
     }
+
 }
 
 /**
- * 
+ * questions = {
+ *              placeholder: term, 
+ *              question: ["", ""], 
+ *              answer: ["", ""]
+ *             }
  * @param {json object} analysis 
  * @returns 
  */
 function buildTooltipContent(analysis) {
+    console.log("analysis in buildtooltip content: ", analysis);
     let html = '';
+    let fallbackELement = document.createElement('div');
+    fallbackELement.textContent = 'No definition found';
+    let htmlElement = document.createElement('div');
+    let questionList = document.createElement('ul');
+
+    htmlElement.appendChild(questionList);
 
     if (analysis.definition) {
-        html += `<div class="tooltip-definition">${analysis.definition}</div>`
+        const definition = document.createElement('div');
+        definition.className = 'tooltip-definition';
+        definition.textContent = analysis.definition;
+        htmlElement.appendChild(definition);
     }
 
-    if (analysis.questions) {
-        html += `<ul class="tooltip-questions"><li>${analysis.questions}</li></ul>`;
+    if (analysis.questions.length > 1 && analysis.answers.length > 1) {
+        questionList.className = 'tooltip-questions';
+        htmlElement.appendChild(questionList);
+        for (let index = 0; index < analysis.questions.length; index ++) {
+            const questionElement = document.createElement('li');
+            const toggleElement = document.createElement('li');
+            const toggleButton = document.createElement('button');
+            const answerElement = document.createElement('li');
+            questionElement.textContent = analysis.questions[index];
+            toggleButton.textContent = 'Show Answer';
+            answerElement.textContent = analysis.answers[index];
+            answerElement.className = '.hide-answer';
+            toggleButton.className = '.tooltip-show-answer-btn';
+            toggleElement.appendChild(toggleButton);
+            questionList.appendChild(questionElement);
+            questionList.appendChild(toggleElement);
+            questionList.appendChild(answerElement);
+        }
+    } else {
+        const questionElement = document.createElement('li');
+        const answerElement = document.createElement('li');
+        const toggleElement = document.createElement('li');
+        const toggleButton = document.createElement('button');
+
+        questionList.className = 'tooltip-questions';
+        answerElement.className = '.hide-answer';
+        questionElement.textContent = analysis.questions[0];
+        toggleButton.textContent = 'Show Answer';
+        answerElement.textContent = analysis.answers[0];
+        
+        htmlElement.appendChild(questionList);
+        questionList.appendChild(questionElement);
+        toggleElement.appendChild(toggleButton);
     }
 
-    return html || '<div>No definition found</div>';
+    return htmlElement || fallbackELement;
 }
 
 /**
  * 
  */
 function setupTooltips() {
+    if (document.querySelector('.tooltip')) return; 
     const tooltip = document.createElement('div');
     tooltip.className = 'tooltip tooltip-visibility';
     document.body.appendChild(tooltip);
@@ -221,12 +271,19 @@ function setupTooltips() {
             }
 
             tooltip.classList.remove('tooltip-visibility');
-            tooltip.innerHTML = buildTooltipContent(analysis);
+            tooltip.replaceChildren(buildTooltipContent(analysis));
 
             const tooltipShape = event.target.getBoundingClientRect(); 
-            tooltip.style.top = `${tooltipShape.bottom + window.scrollY + 8}px`;
+            tooltip.style.top = `${tooltipShape.bottom + window.scrollY}px`;
             tooltip.style.left = `${tooltipShape.left + window.scrollX}px`;
         }) );
+
+        tooltip.addEventListener('mouseenter', () => {
+            tooltip.classList.remove('tooltip-visibility')
+        });
+        tooltip.addEventListener('mouseleave', () => {
+            tooltip.classList.add('tooltip-visibility');
+        });
 
         term.addEventListener('mouseleave', () => {
             tooltip.classList.add('tooltip-visibility');
@@ -251,18 +308,19 @@ function applyAnalysisAsHighlights(analysis) {
     const abstractNodesArray = getAbstractTextNodes();
     // const textNodesArray = extractTextNodes();
     const { regex, termMap } = buildRegexTerms(analysis);
-    let termMatches = [];
+    let termMatchesArray = [];
 
     abstractNodesArray.forEach(node => {
         const parent = node.parentNode;
         if (!parent || parent.closest('script, style, noscript') || parent.classList?.contains('highlighted-term')) return;
 
         const regexMatchesArray = findRegexMatches(node, regex);
-        termMatches = termMatches.concat(regexMatchesArray);
+        termMatchesArray = termMatchesArray.concat(regexMatchesArray);
 
     });
 
-    wrapMatchesInHighlights(termMatches, termMap);
+    console.log("analysis: ", analysis, "regex: ", regex, "termMap: ", termMap, "termMatchesArray: ", termMatchesArray);
+    wrapMatchesInHighlights(termMatchesArray, termMap);
     setupTooltips();
 }
 
