@@ -20,47 +20,62 @@ json_methodologies = {
             ]
 }
 
-json_combined = {
-            "terms": [
-                {"term": "mRNA", "definition": "Messenger RNA, carries genetic info from DNA."},
-            ],
-            "methodologies": [
-                { "methodology": "surveys and questionnaires", 
-                "definition" : "This study used quantitative PCR to amplify mRNA sequences."},
-            ]
-        }
-
 json_combined_questions = {
             "terms": [
                 {"term": "mRNA", 
                 "definition": "Messenger RNA, carries genetic info from DNA.",
                 "questions": [
                     "What is the role of mRNA in protein synthesis?",
-                    "How does mRNA differ from tRNA?"]
+                    "How does mRNA differ from tRNA?"],
+                "answers": [
+                    "The rol of mRNA is this",
+                    "mRNA differs from tRNA by way of"
+                ]
                 },
                 {"term": "ELISA",
                 "definition": "Stands for Enzyme-Linked Immunosorbent Assay. A lab technique to detect antigens or antibodies.",
                 "questions": [
-                    "What does this technique used for?",
-                    "What does ELISA stand for?"]
+                    "What is this technique used for?",
+                    "What does ELISA stand for?"],
+                "answers": [
+                    "This technique is used for this",
+                    "ELISA stands for this"
+                ]
                 }
             ],
             "methodologies": [
                 {
                     "methodology": "cohort study", 
                     "definition" : "An observational study that follows a group (cohort) of individuals over time to assess outcomes based on exposures or characteristics.",
-                    "questions": ["What criteria were used to define the cohort in this study?", "What confounding variables might affect the outcome?"]
+                    "questions": ["What criteria were used to define the cohort in this study?", 
+                                  "What confounding variables might affect the outcome?"],
+                    "answers": [
+                        "This technique is used for this",
+                        "ELISA stands for this"
+                    ]
                 },
                 {"methodology": "randomized controlled trial", 
                 "definition" : "A study design where participants are randomly assigned to either the treatment or control group to reduce bias and establish causality.",
-                "questions": ["What are the benefits of randomization in this study's context?", "How was blinding handled, and why is it important?"]}
-            ]
+                "questions": [
+                        "What are the benefits of randomization in this study's context?", 
+                        "How was blinding handled, and why is it important?"],
+                "answers": [
+                        "This technique is used for this",
+                        "ELISA stands for this"
+                    ]
+                }
+            ],
         }
 
 json_questions = {
             "questions": [
-                {"placeholder": "MRNA", "question": "What is the purpose of MRNA in the process?", "answer": "Carries genetic info from DNA."},
-                {"placeholder": "DNA", "question": "What is the purpose of DNA in the process?", "answer": "Gives the instructions to the body."}
+                {"placeholder": "MRNA", 
+                 "question":["What is the purpose of MRNA in the process?", "How will mRNA affect this process?"], 
+                 "answers": ["Carries genetic info from DNA.", "mRNA will affect this process by creating"]
+                 },
+                {"placeholder": "DNA", 
+                 "question": ["What is the purpose of DNA in the process?", "If DNA wasnt part of this process what would happen?"], 
+                 "answers": ["Gives the instructions to the body.", "The process would break down during stage two."]}
             ]
         }
 
@@ -74,7 +89,7 @@ class AnalyzeWithQuestions(APIView):
         if not abstract_text:
             return Response({ "Error in AnalyzeLanguage View": "No text present"}, status=status.HTTP_400_BAD_REQUEST)
 
-        prompt = f"Define all specialized language and methodology found in the text below, for each term found create two active reading questions that will test my knowledge. Return valid JSON only, do not include markdown do not include extra white space or new line syntax. json format: {json_combined_questions} text: {abstract_text}"
+        prompt = f"Define all specialized language and methodology found in the text below and for each term found create two active reading questions that will test my knowledge. Return valid JSON only, do not include markdown do not include extra white space or new line syntax. json format: {json_combined_questions} text: {abstract_text}"
 
         try:
             output = prompt_chatgpt(prompt)
