@@ -188,6 +188,15 @@ function wrapMatchesInHighlights(regexMatchesArray, termMap) {
 
 }
 
+function addEventListenerForShowAnswer(button) {
+    console.log("DEBUGGING, button: ", button);
+    button.addEventListener('click', (event) => {
+        console.log("DEBUGGING, button.nextElementSibling:", button.nextElementSibling);
+        button.nextElementSibling.classList.toggle('hide-answer');
+    });
+
+}
+
 /**
  * questions = {
  *              placeholder: term, 
@@ -225,21 +234,24 @@ function buildTooltipContent(analysis) {
             questionElement.textContent = analysis.questions[index];
             toggleButton.textContent = 'Show Answer';
             answerElement.textContent = analysis.answers[index];
-            answerElement.className = '.hide-answer';
-            toggleButton.className = '.tooltip-show-answer-btn';
+            answerElement.className = 'hide-answer answer';
+            toggleElement.className = 'answer-btn-li';
+            toggleButton.className = 'tooltip-show-answer-btn';
             toggleElement.appendChild(toggleButton);
             questionList.appendChild(questionElement);
             questionList.appendChild(toggleElement);
             questionList.appendChild(answerElement);
+            addEventListenerForShowAnswer(toggleElement);
         }
-    } else {
+    } else if (analysis.answers?.length > 0) {
         const questionElement = document.createElement('li');
         const answerElement = document.createElement('li');
         const toggleElement = document.createElement('li');
         const toggleButton = document.createElement('button');
 
         questionList.className = 'tooltip-questions';
-        answerElement.className = '.hide-answer';
+        answerElement.className = 'hide-answer';
+        toggleElement.className = 'answer-btn-li';
         questionElement.textContent = analysis.questions[0];
         toggleButton.textContent = 'Show Answer';
         answerElement.textContent = analysis.answers[0];
@@ -247,6 +259,13 @@ function buildTooltipContent(analysis) {
         htmlElement.appendChild(questionList);
         questionList.appendChild(questionElement);
         toggleElement.appendChild(toggleButton);
+    } else {
+        console.log("IS IT HERE???");
+        const questionElement = document.createElement('li');
+        questionList.className = 'tooltip-questions';
+        questionElement.textContent = analysis.questions[0];
+        questionList.appendChild(questionElement);
+        htmlElement.appendChild(questionList);
     }
 
     return htmlElement || fallbackELement;
@@ -256,7 +275,7 @@ function buildTooltipContent(analysis) {
  * 
  */
 function setupTooltips() {
-    if (document.querySelector('.tooltip')) return; 
+    // if (document.querySelector('.tooltip')) return; 
     const tooltip = document.createElement('div');
     tooltip.className = 'tooltip tooltip-visibility';
     document.body.appendChild(tooltip);
